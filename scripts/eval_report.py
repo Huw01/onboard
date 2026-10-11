@@ -13,7 +13,6 @@ from onboard.evals import evaluate, replay_run
 from onboard.llm import FIXTURES
 
 ROOT = Path(__file__).resolve().parents[1]
-START, END = "<!-- EVAL:START -->", "<!-- EVAL:END -->"
 
 
 def md_table(df) -> str:
@@ -24,6 +23,49 @@ def md_table(df) -> str:
         vals = [f"**{v}**" if idx == "TOTAL" else str(v) for v in row]
         lines.append("| " + " | ".join([name] + vals) + " |")
     return "\n".join(lines)
+
+
+def headline(e: dict) -> str:
+    """The one set of headline numbers (rules + LLM review pass)."""
+    t = e["scoreboard_after"].loc["TOTAL"]
+    n = int(t["injected"])
+    auto, held, silent = int(t["fixed"] + t["removed"]), int(t["held"]), int(t["silent"])
+    assert auto + held + silent == n
+    m, u = e["mapping"], e["usage"]
+    fp = e["false_positive_sources"]
+    codes = sorted({k.split(":", 1)[1] for k in fp})
+    fp_detail = ", ".join(f"{k.split(':', 1)[1]} {v}" for k, v in sorted(fp.items()))
+    missed = e["score_after"]["missed_by_type"]
+    lines = [
+        f"Full pipeline (LLM mapping + deterministic validator + LLM review pass) on the "
+        f"sample export, scored against the answer key of **{n:,} injected corruptions**:",
+        "",
+        "| outcome | corruptions | share |",
+        "|---|---|---|",
+        f"| **auto-fixed**: loaded with the right value, or duplicate removed | {auto:,} | "
+        f"**{auto / n:.1%}** |",
+        f"| **routed to a person**: held out of the load with the reason, never guessed | "
+        f"{held:,} | **{held / n:.1%}** |",
+        f"| **undetected**: loaded with a wrong value | {silent:,} | **{silent / n:.1%}** |",
+        "",
+        f"- **{e['silent_outside_corruptions_after']}** correct cells changed by the LLM.",
+        f"- **{m['columns_correct']} / {m['columns_total']}** columns mapped correctly, "
+        f"**{m['codes_wrong']}** wrong code translations ({m['codes_correct']} / "
+        f"{m['codes_total']} applied correctly, {m['codes_missing']} left for a person).",
+        f"- **${u['cost_usd']:.2f}** per full run ({e['model']}, provider-reported), "
+        f"≈ {e['wall_s'] / 60:.0f} min live; CI replays the recorded responses in seconds.",
+        f"- The {silent} undetected are " + ", ".join(
+            f"{v} {DESCRIBE.get(k, k)}" for k, v in sorted(missed.items(), key=lambda kv: -kv[1]))
+        + ": nothing in the file can tell the right reading.",
+        f"- {e['score_after']['false_positives']} clean rows are also held (false positives). "
+        f"All of them use one of the {len(codes)} codes the mapper left for a person "
+        f"({fp_detail}); they load as soon as someone confirms those codes.",
+    ]
+    return "\n".join(lines)
+
+
+DESCRIBE = {"date_mmdd": "day/month dates that are valid either way round",
+            "unit_mixup": "labor values recorded in minutes that still look like hours"}
 
 
 def section(e: dict) -> str:
@@ -68,7 +110,10 @@ def section(e: dict) -> str:
         "|---|---|---|",
         f"| silent errors in the load | {sb['silent_errors']} | {sa['silent_errors']} |",
         f"| correct cells changed by the LLM | – | {e['silent_outside_corruptions_after']} |",
-        f"| false positives (clean rows held: all from codes left for a person) | {sb['false_positives']} | {sa['false_positives']} |",
+        f"| false positives (clean rows held; every one uses "
+        f"{', '.join(sorted({k.split(':', 1)[1] for k in e['false_positive_sources']}))}, "
+        f"codes left for a person) | "
+        f"{sb['false_positives']} | {sa['false_positives']} |",
         f"| rows loaded identical to ground truth | {sb['rows_recovered']:,} / "
         f"{sb['rows_total']:,} | {sa['rows_recovered']:,} / {sa['rows_total']:,} |",
         "",
@@ -83,21 +128,77 @@ def section(e: dict) -> str:
     return "\n".join(out)
 
 
+KSTART, KEND = "<!-- KEY:START -->", "<!-- KEY:END -->"
+
+
+def key_numbers(e: dict) -> str:
+    """The only numbers in the README: everything else lives in docs/eval.md."""
+    m, u = e["mapping"], e["usage"]
+    return (f"**{m['columns_correct']} / {m['columns_total']}** legacy columns mapped correctly "
+            f"by the LLM · **{e['silent_outside_corruptions_after']}** correct cells changed by "
+            f"the LLM · **≈ ${u['cost_usd']:.2f}** per full run")
+
+
+def baseline() -> str:
+    """Rules only, with the hand-written reference mapping (no LLM at all)."""
+    from onboard.corrupt import read_legacy_xlsx
+    from onboard.evals import AS_OF, EXPORT, TRUTH
+    from onboard.mapping import reference_mapping
+    from onboard.score import score
+    from onboard.validate import validate
+
+    s = score(validate(read_legacy_xlsx(EXPORT), reference_mapping(), AS_OF), TRUTH).as_dict()
+    n = s["corruptions"]
+    missed = s["missed_by_type"]
+    return "\n".join([
+        "What the deterministic validator does on its own, given the hand-written reference "
+        "mapping instead of the LLM's and no review pass "
+        "(`onboard validate --as-of 2026-09-30 --truth data/ground_truth`). "
+        "*Caught* here means fixed, dropped or held for a person.",
+        "",
+        "| metric | result |",
+        "|---|---|",
+        f"| corruptions caught (fixed, dropped or held) | {s['detected']:,} / {n:,} "
+        f"({s['detected'] / n:.1%}) |",
+        f"| false positives (findings on untouched rows) | {s['false_positives']} |",
+        f"| silent errors (loaded with a wrong value) | {s['silent_errors']} |",
+        f"| rows loaded identical to ground truth | {s['rows_recovered']:,} / "
+        f"{s['rows_total']:,} |",
+        "",
+        "The silent errors are " + ", ".join(
+            f"{v} {DESCRIBE.get(k, k)}" for k, v in sorted(missed.items(), key=lambda kv: -kv[1]))
+        + ". Once a date column is known to mix DD/MM and MM/DD the validator raises a "
+        "column-level warning with the count, but no rule can say which reading is right; "
+        "the fix belongs at the source. The tests pin this down: zero false positives, and "
+        "only these two kinds are ever missed.",
+    ])
+
+
 def main() -> None:
-    e = evaluate(replay_run(usage_path=None))
-    text = section(e)
-    (ROOT / "docs").mkdir(exist_ok=True)
-    (ROOT / "docs" / "eval.md").write_text("# Eval results\n\n" + text + "\n")
+    rr = replay_run(usage_path=None)
+    e = evaluate(rr)
+    e["model"] = rr.calls[0]["model"] if rr.calls else "?"
+    text, head = section(e), headline(e)
+    path = ROOT / "docs" / "eval.md"
+    old = path.read_text() if path.exists() else ""
+    # hand-written sections (held-out, run-to-run variance) are kept as they are
+    keep = old[old.index(MANUAL):] if MANUAL in old else MANUAL + "\n"
+    path.write_text(
+        "# Eval results\n\nEverything below is regenerated by `scripts/eval_report.py` from "
+        "the recorded run, which pytest and CI replay without an API key, except the sections "
+        "after the marker at the end, which come from live runs.\n\n"
+        "## Headline\n\n" + head + "\n\n## Details\n\n" + text
+        + "\n\n## Rules-only baseline (no LLM)\n\n" + baseline() + "\n\n" + keep)
     readme = ROOT / "README.md"
     r = readme.read_text()
-    block = f"{START}\n{text}\n{END}"
-    if START in r:
-        r = re.sub(re.escape(START) + ".*?" + re.escape(END), lambda _: block, r, flags=re.S)
-    else:
-        r = r.replace("## From computer-use prototype to API",
-                      f"## Eval results\n\n{block}\n\n## From computer-use prototype to API")
-    readme.write_text(r)
-    print(text)
+    if KSTART in r:
+        r = re.sub(re.escape(KSTART) + ".*?" + re.escape(KEND),
+                   lambda _: f"{KSTART}\n{key_numbers(e)}\n{KEND}", r, flags=re.S)
+        readme.write_text(r)
+    print(head)
+
+
+MANUAL = "<!-- LIVE RUNS: hand-maintained below this line -->"
 
 
 if __name__ == "__main__":

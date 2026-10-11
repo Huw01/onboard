@@ -43,6 +43,10 @@ def evaluate(rr: RunResult) -> dict:
                            for k in ("date", "labor", "dup")},
         "usage": rr.usage,
         "wall_s": wall_time(rr.calls),
+        # clean rows held anyway, by (check, legacy value): which codes cause them
+        "false_positive_sources": {f"{c}:{v}": int(n) for (c, v), n in
+                                   s_after.false_positives.groupby(["check", "original"])
+                                   .size().items()},
     }
 
 
