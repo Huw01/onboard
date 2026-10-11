@@ -159,6 +159,7 @@ class Result:
     findings: list[Finding]
     rows_in: dict[str, int]
     status: dict[str, list[str]] = field(default_factory=dict)   # per row: ok/dropped/...
+    staged: dict[str, pd.DataFrame] = field(default_factory=dict)  # all rows, post-fix
 
     def exceptions(self) -> pd.DataFrame:
         cols = list(Finding.__dataclass_fields__)
@@ -266,7 +267,7 @@ class Validator:
         self.references()
         self.consistency()
         self.cascade_holds()
-        return Result(self.output_tables(), self.findings, rows_in, self.status)
+        return Result(self.output_tables(), self.findings, rows_in, self.status, self.t)
 
     # ---- per-table checks ------------------------------------------------
     def strip_whitespace(self, table: str) -> None:

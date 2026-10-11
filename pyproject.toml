@@ -20,6 +20,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
+docs = ["matplotlib>=3.8"]
 
 [project.scripts]
 onboard = "onboard.cli:app"
