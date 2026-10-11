@@ -71,3 +71,20 @@ WO_STATUSES = ["OPEN", "IN_PROGRESS", "COMPLETED", "CANCELLED"]
 ASSET_STATUSES = ["ACTIVE", "INACTIVE"]
 TRIGGER_TYPES = ["TIME", "METER"]
 CRAFTS = ["MECH", "ELEC", "INST", "HV"]
+
+# Fields that must be non-blank for a row to be loadable.
+REQUIRED: dict[str, list[str]] = {
+    "locations": ["location_id", "site_id", "name", "location_type"],
+    "assets": ["asset_id", "description", "asset_class", "location_id", "criticality",
+               "install_date", "meter_type", "status"],
+    "pm_schedules": ["pm_id", "asset_id", "description", "trigger_type", "frequency_value",
+                     "frequency_unit"],
+    "work_orders": ["wo_id", "asset_id", "wo_type", "status", "priority", "description",
+                    "reported_date", "scheduled_date"],
+}
+
+INT_COLUMNS = {"criticality", "frequency_value", "priority"}
+FLOAT_COLUMNS = {"est_labor_hours", "labor_hours"}
+
+# Load order: a table may only reference tables before it.
+LOAD_ORDER = ["locations", "assets", "pm_schedules", "work_orders"]
