@@ -74,6 +74,43 @@ def validate(
 
 
 @app.command()
+def run(
+    export: Path = typer.Argument(..., help="Legacy export (.xlsx, one sheet per table)."),
+    out: Path = typer.Option(Path("out"), help="Output directory."),
+    as_of: str = typer.Option(None, help="Extract date (YYYY-MM-DD); later dates are flagged."),
+    mapping: Path = typer.Option(None, help="Use this mapping instead of asking the LLM."),
+    review: bool = typer.Option(True, help="Run the LLM review pass on unresolved rows."),
+    llm_mode: str = typer.Option(None, help="replay | auto | record | live (default: auto)."),
+    model: str = typer.Option(None, help="Model name (default: grok-4.7)."),
+    truth: Path = typer.Option(None, help="Answer key directory, to score the run."),
+) -> None:
+    """Map, validate and review a legacy export end to end."""
+    from datetime import date
+
+    from onboard.llm import LLM
+    from onboard.pipeline import run as run_pipeline, write_run
+
+    llm = LLM(model=model, mode=llm_mode, usage_path=out / "usage.csv")
+    rr = run_pipeline(export, llm, date.fromisoformat(as_of) if as_of else None,
+                      mapping, review)
+    write_run(rr, out)
+    typer.echo(rr.after.summary_text())
+    acc = sum(d["accepted"] for d in rr.decisions)
+    typer.echo(f"LLM review: {len(rr.decisions)} questions, {acc} answers accepted")
+    u = rr.usage
+    typer.echo(f"LLM usage: {u['calls']} calls, {u['prompt_tokens']} in "
+               f"({u['cached_tokens']} cached), {u['completion_tokens']} out "
+               f"+ {u['reasoning_tokens']} reasoning, ${u['cost_usd']:.4f}")
+    typer.echo(f"wrote {out}/ (mapping.json, mapping_report.json, review_decisions.csv, "
+               "clean/, exceptions.csv, summary.txt, usage.csv)")
+    if truth:
+        from onboard.score import score
+
+        for k, v in score(rr.after, truth).as_dict().items():
+            typer.echo(f"{k:<20} {v}")
+
+
+@app.command()
 def version() -> None:
     """Print the package version."""
     from onboard import __version__
