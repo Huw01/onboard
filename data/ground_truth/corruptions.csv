@@ -329,11 +329,11 @@ LOCATIONS,3,5,GR-PIT-02,LOC_CD,locations,location_id,GR-PIT-02,GR-PIT-02,GR-PIT-
 LOCATIONS,11,13,GR-CONV-03,LOC_CD,locations,location_id,GR-CONV-03,GR-CONV-03,GR-CONV-03 ,whitespace,
 LOCATIONS,30,32,PH,LOC_CD,locations,location_id,PH,PH, PH ,whitespace,
 PM_SCHED,1,3,PM-00002,LAST_DONE_DT,pm_schedules,last_done_date,2025-08-04,04/08/2025,08/04/2025,date_mmdd,ambiguous (day<=12)
-PM_SCHED,5,7,PM-00006,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,5,7,PM-00006,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,11,13,PM-00012,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
 PM_SCHED,12,14,PM-00013,FREQ_UOM,pm_schedules,frequency_unit,DAYS,D,W,unit_mixup,frequency unit recorded as W instead of D
 PM_SCHED,13,15,PM-00014,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
-PM_SCHED,15,17,PM-00016,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
+PM_SCHED,15,17,PM-00016,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,21,23,PM-00022,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
 PM_SCHED,34,36,PM-00035,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
 PM_SCHED,37,39,PM-00038,LAST_DONE_DT,pm_schedules,last_done_date,2026-09-28,28/09/2026,2026-09-28,date_iso,
@@ -343,12 +343,12 @@ PM_SCHED,40,42,PM-00041,LAST_DONE_DT,pm_schedules,last_done_date,2025-01-12,12/0
 PM_SCHED,47,49,PM-00048,LAST_DONE_DT,pm_schedules,last_done_date,2026-07-06,06/07/2026,07/06/2026,date_mmdd,ambiguous (day<=12)
 PM_SCHED,48,50,PM-00049,EQUIP_NO,pm_schedules,asset_id,CV-1006-MTR1,CV-1006-MTR1,,blank_required,
 PM_SCHED,49,51,PM-00050,PM_FREQ,pm_schedules,frequency_value,2000,2000,2000 run hrs,free_text_frequency,
-PM_SCHED,55,57,PM-00056,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
-PM_SCHED,59,61,PM-00060,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,55,57,PM-00056,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
+PM_SCHED,59,61,PM-00060,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,61,63,PM-00062,PM_FREQ,pm_schedules,frequency_value,180,180,every 6 months,free_text_frequency,
 PM_SCHED,67,69,PM-00068,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
 PM_SCHED,69,71,PM-00070,FREQ_UOM,pm_schedules,frequency_unit,DAYS,D,W,unit_mixup,frequency unit recorded as W instead of D
-PM_SCHED,79,81,PM-00080,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
+PM_SCHED,79,81,PM-00080,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,85,87,PM-00086,FREQ_UOM,pm_schedules,frequency_unit,DAYS,D,W,unit_mixup,frequency unit recorded as W instead of D
 PM_SCHED,89,91,PM-00090,PM_FREQ,pm_schedules,frequency_value,180,180,every 6 months,free_text_frequency,
 PM_SCHED,91,93,PM-00092,LAST_DONE_DT,pm_schedules,last_done_date,2026-09-11,11/09/2026,09/11/2026,date_mmdd,ambiguous (day<=12)
@@ -356,12 +356,12 @@ PM_SCHED,95,97,PM-00096,PM_FREQ,pm_schedules,frequency_value,365,365,1Y,free_tex
 PM_SCHED,98,100,PM-00099,EQUIP_NO,pm_schedules,asset_id,CV-1012-BLT1,CV-1012-BLT1,CV-1012-BLT1   ,whitespace,
 PM_SCHED,99,101,PM-00100,LAST_DONE_DT,pm_schedules,last_done_date,2025-12-27,27/12/2025,12/27/2025,date_mmdd,invalid as DD/MM
 PM_SCHED,101,103,PM-00102,LAST_DONE_DT,pm_schedules,last_done_date,2026-09-25,25/09/2026,09/25/2026,date_mmdd,invalid as DD/MM
-PM_SCHED,102,104,PM-00103,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
-PM_SCHED,110,112,PM-00111,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,102,104,PM-00103,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
+PM_SCHED,110,112,PM-00111,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,111,113,PM-00112,PM_FREQ,pm_schedules,frequency_value,180,180,semi-annual,free_text_frequency,
 PM_SCHED,119,121,PM-00120,PM_FREQ,pm_schedules,frequency_value,365,365,annual,free_text_frequency,
 PM_SCHED,125,127,PM-00126,LAST_DONE_DT,pm_schedules,last_done_date,2024-12-10,10/12/2024,12/10/2024,date_mmdd,ambiguous (day<=12)
-PM_SCHED,126,128,PM-00127,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
+PM_SCHED,126,128,PM-00127,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
 PM_SCHED,127,129,PM-00128,PM_FREQ,pm_schedules,frequency_value,2000,2000,every 2000 hours,free_text_frequency,
 PM_SCHED,130,132,PM-00131,PM_DESC,pm_schedules,description,Gearbox oil change,Gearbox oil change,,blank_required,
 PM_SCHED,130,132,PM-00131,PM_FREQ,pm_schedules,frequency_value,365,365,Annually,free_text_frequency,
@@ -374,7 +374,7 @@ PM_SCHED,170,172,PM-00171,PM_DESC,pm_schedules,description,Motor vibration and t
 PM_SCHED,173,175,PM-00174,PM_FREQ,pm_schedules,frequency_value,365,365,annual,free_text_frequency,
 PM_SCHED,176,178,PM-00177,LAST_DONE_DT,pm_schedules,last_done_date,2025-12-12,12/12/2025,2025-12-12,date_iso,
 PM_SCHED,177,179,PM-00178,EQUIP_NO,pm_schedules,asset_id,CV-1022-MTR1,CV-1022-MTR1,,blank_required,
-PM_SCHED,179,181,PM-00180,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
+PM_SCHED,179,181,PM-00180,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
 PM_SCHED,180,182,PM-00181,PM_FREQ,pm_schedules,frequency_value,365,365,annual,free_text_frequency,
 PM_SCHED,186,188,PM-00187,PM_FREQ,pm_schedules,frequency_value,365,365,1Y,free_text_frequency,
 PM_SCHED,191,193,PM-00192,EQUIP_NO,pm_schedules,asset_id,CV-1024-MTR2,CV-1024-MTR2, CV-1024-MTR2 ,whitespace,
@@ -386,7 +386,7 @@ PM_SCHED,206,208,PM-00207,FREQ_UOM,pm_schedules,frequency_unit,DAYS,D,W,unit_mix
 PM_SCHED,208,210,PM-00209,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,210,212,PM-00211,PM_FREQ,pm_schedules,frequency_value,7,7,weekly,free_text_frequency,
 PM_SCHED,218,220,PM-00219,LAST_DONE_DT,pm_schedules,last_done_date,2025-06-13,13/06/2025,06/13/2025,date_mmdd,invalid as DD/MM
-PM_SCHED,221,223,PM-00222,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,221,223,PM-00222,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,225,227,PM-00226,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,226,228,PM-00227,PM_FREQ,pm_schedules,frequency_value,365,365,Annually,free_text_frequency,
 PM_SCHED,234,236,PM-00235,LAST_DONE_DT,pm_schedules,last_done_date,2026-03-17,17/03/2026,2026-03-17,date_iso,
@@ -400,7 +400,7 @@ PM_SCHED,263,265,PM-00264,PM_DESC,pm_schedules,description,Motor bearing regreas
 PM_SCHED,270,272,PM-00271,LAST_DONE_DT,pm_schedules,last_done_date,2026-08-11,11/08/2026,08/11/2026,date_mmdd,ambiguous (day<=12)
 PM_SCHED,270,272,PM-00271,PM_FREQ,pm_schedules,frequency_value,30,30,every month,free_text_frequency,
 PM_SCHED,272,274,PM-00273,PM_FREQ,pm_schedules,frequency_value,2000,2000,every 2000 hours,free_text_frequency,
-PM_SCHED,273,275,PM-00274,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
+PM_SCHED,273,275,PM-00274,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,279,281,PM-00280,PM_FREQ,pm_schedules,frequency_value,7,7,weekly,free_text_frequency,
 PM_SCHED,283,285,PM-00284,EQUIP_NO,pm_schedules,asset_id,CV-1036-MTR2,CV-1036-MTR2,CV-1036-MTR2  ,whitespace,
 PM_SCHED,283,285,PM-00284,LAST_DONE_DT,pm_schedules,last_done_date,2024-02-20,20/02/2024,2024-02-20,date_iso,
@@ -418,20 +418,20 @@ PM_SCHED,301,303,PM-00302,LAST_DONE_DT,pm_schedules,last_done_date,2025-10-30,30
 PM_SCHED,301,303,PM-00302,PM_FREQ,pm_schedules,frequency_value,2000,2000,every 2000 hours,free_text_frequency,
 PM_SCHED,307,309,PM-00308,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,309,311,PM-00310,PM_FREQ,pm_schedules,frequency_value,30,30,1M,free_text_frequency,
-PM_SCHED,328,330,PM-00329,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,328,330,PM-00329,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,335,337,PM-00336,PM_FREQ,pm_schedules,frequency_value,2000,2000,every 2000 hours,free_text_frequency,
 PM_SCHED,337,339,PM-00338,LAST_DONE_DT,pm_schedules,last_done_date,2025-01-14,14/01/2025,45671,date_excel_serial,Excel serial day number
 PM_SCHED,341,343,PM-00342,PM_FREQ,pm_schedules,frequency_value,7,7,every 1 wk,free_text_frequency,
 PM_SCHED,342,344,PM-00343,PM_FREQ,pm_schedules,frequency_value,30,30,30d,free_text_frequency,
 PM_SCHED,345,347,PM-00346,PM_FREQ,pm_schedules,frequency_value,365,365,annual,free_text_frequency,
-PM_SCHED,346,348,PM-00347,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,346,348,PM-00347,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,351,353,PM-00352,LAST_DONE_DT,pm_schedules,last_done_date,2024-06-26,26/06/2024,06/26/2024,date_mmdd,invalid as DD/MM
 PM_SCHED,351,353,PM-00352,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,361,363,PM-00362,FREQ_UOM,pm_schedules,frequency_unit,DAYS,D,W,unit_mixup,frequency unit recorded as W instead of D
 PM_SCHED,364,366,PM-00365,LAST_DONE_DT,pm_schedules,last_done_date,2026-04-11,11/04/2026,2026-04-11,date_iso,
 PM_SCHED,367,369,PM-00368,PM_FREQ,pm_schedules,frequency_value,180,180,180d,free_text_frequency,
 PM_SCHED,368,370,PM-00369,EQUIP_NO,pm_schedules,asset_id,CV-1047,CV-1047, CV-1047 ,whitespace,
-PM_SCHED,370,372,PM-00371,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,370,372,PM-00371,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,374,376,PM-00375,PM_FREQ,pm_schedules,frequency_value,365,365,1Y,free_text_frequency,
 PM_SCHED,376,378,PM-00377,FREQ_UOM,pm_schedules,frequency_unit,DAYS,D,W,unit_mixup,frequency unit recorded as W instead of D
 PM_SCHED,378,380,PM-00379,PM_FREQ,pm_schedules,frequency_value,7,7,1W,free_text_frequency,
@@ -441,7 +441,7 @@ PM_SCHED,391,393,PM-00392,EQUIP_NO,pm_schedules,asset_id,CV-1049-TPL1,CV-1049-TP
 PM_SCHED,394,396,PM-00395,FREQ_UOM,pm_schedules,frequency_unit,DAYS,D,W,unit_mixup,frequency unit recorded as W instead of D
 PM_SCHED,397,399,PM-00398,LAST_DONE_DT,pm_schedules,last_done_date,2024-04-12,12/04/2024,04/12/2024,date_mmdd,ambiguous (day<=12)
 PM_SCHED,399,401,PM-00400,PM_FREQ,pm_schedules,frequency_value,365,365,1Y,free_text_frequency,
-PM_SCHED,400,402,PM-00401,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,400,402,PM-00401,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,402,404,PM-00403,LAST_DONE_DT,pm_schedules,last_done_date,2025-02-25,25/02/2025,02/25/2025,date_mmdd,invalid as DD/MM
 PM_SCHED,403,405,PM-00404,PM_DESC,pm_schedules,description,Belt thickness survey,Belt thickness survey,,blank_required,
 PM_SCHED,408,410,PM-00409,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
@@ -450,14 +450,14 @@ PM_SCHED,419,421,PM-00420,EQUIP_NO,pm_schedules,asset_id,CV-1052-TPL1,CV-1052-TP
 PM_SCHED,433,435,PM-00434,PM_FREQ,pm_schedules,frequency_value,365,365,Annually,free_text_frequency,
 PM_SCHED,438,440,PM-00439,PM_FREQ,pm_schedules,frequency_value,7,7,every 1 wk,free_text_frequency,
 PM_SCHED,441,443,PM-00442,PM_FREQ,pm_schedules,frequency_value,2000,2000,2000 run hrs,free_text_frequency,
-PM_SCHED,442,444,PM-00443,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,442,444,PM-00443,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,444,446,PM-00445,PM_FREQ,pm_schedules,frequency_value,365,365,annual,free_text_frequency,
 PM_SCHED,447,449,PM-00448,LAST_DONE_DT,pm_schedules,last_done_date,2026-05-25,25/05/2026,05/25/2026,date_mmdd,invalid as DD/MM
 PM_SCHED,449,451,PM-00450,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
 PM_SCHED,450,452,PM-00451,LAST_DONE_DT,pm_schedules,last_done_date,2025-10-08,08/10/2025,45938,date_excel_serial,Excel serial day number
-PM_SCHED,453,455,PM-00454,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
+PM_SCHED,453,455,PM-00454,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
 PM_SCHED,455,457,PM-00456,FREQ_UOM,pm_schedules,frequency_unit,DAYS,D,W,unit_mixup,frequency unit recorded as W instead of D
-PM_SCHED,460,462,PM-00461,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,460,462,PM-00461,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,466,468,PM-00467,FREQ_UOM,pm_schedules,frequency_unit,DAYS,D,W,unit_mixup,frequency unit recorded as W instead of D
 PM_SCHED,473,475,PM-00474,PM_FREQ,pm_schedules,frequency_value,180,180,6M,free_text_frequency,
 PM_SCHED,476,478,PM-00477,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
@@ -473,10 +473,10 @@ PM_SCHED,493,495,PM-00494,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,fre
 PM_SCHED,498,500,PM-00499,PM_FREQ,pm_schedules,frequency_value,14,14,2W,free_text_frequency,
 PM_SCHED,503,505,PM-00504,PM_FREQ,pm_schedules,frequency_value,14,14,every 2 wks,free_text_frequency,
 PM_SCHED,510,512,PM-00511,PM_FREQ,pm_schedules,frequency_value,2000,2000,"2,000 h",free_text_frequency,
-PM_SCHED,521,523,PM-00522,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,521,523,PM-00522,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,529,531,PM-00530,LAST_DONE_DT,pm_schedules,last_done_date,2026-06-28,28/06/2026,06/28/2026,date_mmdd,invalid as DD/MM
 PM_SCHED,529,531,PM-00530,PM_FREQ,pm_schedules,frequency_value,30,30,monthly,free_text_frequency,
-PM_SCHED,530,532,PM-00531,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,530,532,PM-00531,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,533,535,PM-00534,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,536,538,PM-00537,PM_FREQ,pm_schedules,frequency_value,14,14,every 2 wks,free_text_frequency,
 PM_SCHED,537,539,PM-00538,PM_FREQ,pm_schedules,frequency_value,2000,2000,"2,000 h",free_text_frequency,
@@ -598,7 +598,7 @@ PM_SCHED,812,814,PM-00813,PM_FREQ,pm_schedules,frequency_value,1000,1000,1000 hr
 PM_SCHED,813,815,PM-00814,PM_FREQ,pm_schedules,frequency_value,500,500,500 h,free_text_frequency,
 PM_SCHED,817,819,PM-00818,LAST_DONE_DT,pm_schedules,last_done_date,2025-10-22,22/10/2025,2025-10-22,date_iso,
 PM_SCHED,820,822,PM-00821,PM_FREQ,pm_schedules,frequency_value,30,30,Monthly,free_text_frequency,
-PM_SCHED,821,823,PM-00822,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,821,823,PM-00822,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,823,825,PM-00824,PM_FREQ,pm_schedules,frequency_value,8000,8000,8000 run hrs,free_text_frequency,
 PM_SCHED,825,827,PM-00826,FREQ_UOM,pm_schedules,frequency_unit,DAYS,D,W,unit_mixup,frequency unit recorded as W instead of D
 PM_SCHED,827,829,PM-00828,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
@@ -614,7 +614,7 @@ PM_SCHED,860,862,PM-00861,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 mon
 PM_SCHED,863,865,PM-00864,LAST_DONE_DT,pm_schedules,last_done_date,2025-01-25,25/01/2025,2025-01-25,date_iso,
 PM_SCHED,864,866,PM-00865,PM_FREQ,pm_schedules,frequency_value,2000,2000,2000H,free_text_frequency,
 PM_SCHED,868,870,PM-00869,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
-PM_SCHED,872,874,PM-00873,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
+PM_SCHED,872,874,PM-00873,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
 PM_SCHED,885,887,PM-00886,LAST_DONE_DT,pm_schedules,last_done_date,2026-09-25,25/09/2026,09/25/2026,date_mmdd,invalid as DD/MM
 PM_SCHED,889,891,PM-00890,PM_FREQ,pm_schedules,frequency_value,30,30,every month,free_text_frequency,
 PM_SCHED,895,897,PM-00896,LAST_DONE_DT,pm_schedules,last_done_date,2024-02-10,10/02/2024,45332,date_excel_serial,Excel serial day number
@@ -622,10 +622,10 @@ PM_SCHED,895,897,PM-00896,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,fre
 PM_SCHED,899,901,PM-00900,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
 PM_SCHED,902,904,PM-00903,PM_FREQ,pm_schedules,frequency_value,8000,8000,8000H,free_text_frequency,
 PM_SCHED,908,910,PM-00909,PM_FREQ,pm_schedules,frequency_value,8000,8000,8000H,free_text_frequency,
-PM_SCHED,912,914,PM-00913,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,912,914,PM-00913,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,925,927,PM-00926,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,930,932,PM-00931,PM_FREQ,pm_schedules,frequency_value,30,30,30d,free_text_frequency,
-PM_SCHED,939,941,PM-00940,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,939,941,PM-00940,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,941,943,PM-00942,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
 PM_SCHED,945,947,PM-00946,LAST_DONE_DT,pm_schedules,last_done_date,2026-08-24,24/08/2026,08/24/2026,date_mmdd,invalid as DD/MM
 PM_SCHED,947,949,PM-00948,LAST_DONE_DT,pm_schedules,last_done_date,2025-08-23,23/08/2025,45892,date_excel_serial,Excel serial day number
@@ -639,7 +639,7 @@ PM_SCHED,972,974,PM-00973,LAST_DONE_DT,pm_schedules,last_done_date,2024-09-15,15
 PM_SCHED,972,974,PM-00973,PM_FREQ,pm_schedules,frequency_value,30,30,30d,free_text_frequency,
 PM_SCHED,975,977,PM-00976,LAST_DONE_DT,pm_schedules,last_done_date,2025-12-17,17/12/2025,12/17/2025,date_mmdd,invalid as DD/MM
 PM_SCHED,981,983,PM-00982,EQUIP_NO,pm_schedules,asset_id,PP-1067,PP-1067,PP-1067  ,whitespace,
-PM_SCHED,986,988,PM-00987,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
+PM_SCHED,986,988,PM-00987,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
 PM_SCHED,989,991,PM-00990,LAST_DONE_DT,pm_schedules,last_done_date,2024-12-06,06/12/2024,2024-12-06,date_iso,
 PM_SCHED,990,992,PM-00991,LAST_DONE_DT,pm_schedules,last_done_date,2025-01-20,20/01/2025,01/20/2025,date_mmdd,invalid as DD/MM
 PM_SCHED,990,992,PM-00991,PM_FREQ,pm_schedules,frequency_value,30,30,30d,free_text_frequency,
@@ -675,21 +675,21 @@ PM_SCHED,1092,1094,PM-01093,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly
 PM_SCHED,1097,1099,PM-01098,PM_FREQ,pm_schedules,frequency_value,30,30,every month,free_text_frequency,
 PM_SCHED,1101,1103,PM-01102,PM_FREQ,pm_schedules,frequency_value,30,30,monthly,free_text_frequency,
 PM_SCHED,1112,1114,PM-01113,PM_FREQ,pm_schedules,frequency_value,300,300,300 cyc,free_text_frequency,
-PM_SCHED,1119,1121,PM-01120,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,1119,1121,PM-01120,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,1120,1122,PM-01121,LAST_DONE_DT,pm_schedules,last_done_date,2024-12-26,26/12/2024,2024-12-26,date_iso,
 PM_SCHED,1124,1126,PM-01125,PM_FREQ,pm_schedules,frequency_value,180,180,180d,free_text_frequency,
 PM_SCHED,1127,1129,PM-01128,PM_FREQ,pm_schedules,frequency_value,30,30,Monthly,free_text_frequency,
 PM_SCHED,1129,1131,PM-01130,PM_FREQ,pm_schedules,frequency_value,500,500,500 MWh,free_text_frequency,
-PM_SCHED,1130,1132,PM-01131,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
+PM_SCHED,1130,1132,PM-01131,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,1134,1136,PM-01135,EQUIP_NO,pm_schedules,asset_id,BS-1002-BAT2,BS-1002-BAT2,BS-1002-BAT2 ,whitespace,
 PM_SCHED,1138,1140,PM-01139,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
-PM_SCHED,1143,1145,PM-01144,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
+PM_SCHED,1143,1145,PM-01144,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
 PM_SCHED,1150,1152,PM-01151,EQUIP_NO,pm_schedules,asset_id,BS-1003,BS-1003,BS-1003	,whitespace,
-PM_SCHED,1151,1153,PM-01152,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,1151,1153,PM-01152,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,1159,1161,PM-01160,LAST_DONE_DT,pm_schedules,last_done_date,2024-12-23,23/12/2024,12/23/2024,date_mmdd,invalid as DD/MM
 PM_SCHED,1168,1170,PM-01169,PM_FREQ,pm_schedules,frequency_value,180,180,every 6 months,free_text_frequency,
 PM_SCHED,1169,1171,PM-01170,PM_FREQ,pm_schedules,frequency_value,30,30,every month,free_text_frequency,
-PM_SCHED,1184,1186,PM-01185,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,1184,1186,PM-01185,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,1188,1190,PM-01189,PM_FREQ,pm_schedules,frequency_value,30,30,every month,free_text_frequency,
 PM_SCHED,1189,1191,PM-01190,PM_FREQ,pm_schedules,frequency_value,30,30,1M,free_text_frequency,
 PM_SCHED,1190,1192,PM-01191,PM_FREQ,pm_schedules,frequency_value,365,365,yearly,free_text_frequency,
@@ -700,7 +700,7 @@ PM_SCHED,1213,1215,PM-01214,FREQ_UOM,pm_schedules,frequency_unit,DAYS,D,W,unit_m
 PM_SCHED,1216,1218,PM-01217,PM_FREQ,pm_schedules,frequency_value,30,30,every month,free_text_frequency,
 PM_SCHED,1225,1227,PM-01226,LAST_DONE_DT,pm_schedules,last_done_date,2026-02-26,26/02/2026,02/26/2026,date_mmdd,invalid as DD/MM
 PM_SCHED,1225,1227,PM-01226,PM_FREQ,pm_schedules,frequency_value,30,30,every month,free_text_frequency,
-PM_SCHED,1233,1235,PM-01234,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
+PM_SCHED,1233,1235,PM-01234,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
 PM_SCHED,1234,1236,PM-01235,LAST_DONE_DT,pm_schedules,last_done_date,2026-03-13,13/03/2026,03/13/2026,date_mmdd,invalid as DD/MM
 PM_SCHED,1234,1236,PM-01235,PM_FREQ,pm_schedules,frequency_value,2000,2000,every 2000 hours,free_text_frequency,
 PM_SCHED,1236,1238,PM-01237,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
@@ -719,7 +719,7 @@ PM_SCHED,1264,1266,PM-01265,LAST_DONE_DT,pm_schedules,last_done_date,2026-04-30,
 PM_SCHED,1268,1270,PM-01269,LAST_DONE_DT,pm_schedules,last_done_date,2026-07-27,27/07/2026,2026-07-27,date_iso,
 PM_SCHED,1276,1278,PM-01277,PM_FREQ,pm_schedules,frequency_value,7,7,Weekly,free_text_frequency,
 PM_SCHED,1277,1279,PM-01278,LAST_DONE_DT,pm_schedules,last_done_date,2026-08-29,29/08/2026,08/29/2026,date_mmdd,invalid as DD/MM
-PM_SCHED,1280,1282,PM-01281,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,1280,1282,PM-01281,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,1282,1284,PM-01283,LAST_DONE_DT,pm_schedules,last_done_date,2026-06-15,15/06/2026,06/15/2026,date_mmdd,invalid as DD/MM
 PM_SCHED,1282,1284,PM-01283,PM_FREQ,pm_schedules,frequency_value,14,14,14 days,free_text_frequency,
 PM_SCHED,1284,1286,PM-01285,LAST_DONE_DT,pm_schedules,last_done_date,2026-01-18,18/01/2026,46040,date_excel_serial,Excel serial day number
@@ -732,13 +732,13 @@ PM_SCHED,1299,1301,PM-01300,LAST_DONE_DT,pm_schedules,last_done_date,2024-07-22,
 PM_SCHED,1302,1304,PM-01303,LAST_DONE_DT,pm_schedules,last_done_date,2026-06-15,15/06/2026,46188,date_excel_serial,Excel serial day number
 PM_SCHED,1302,1304,PM-01303,PM_FREQ,pm_schedules,frequency_value,14,14,fortnightly,free_text_frequency,
 PM_SCHED,1306,1308,PM-01307,LAST_DONE_DT,pm_schedules,last_done_date,2025-10-24,24/10/2025,45954,date_excel_serial,Excel serial day number
-PM_SCHED,1309,1311,PM-01310,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
-PM_SCHED,1318,1320,PM-01319,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
+PM_SCHED,1309,1311,PM-01310,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
+PM_SCHED,1318,1320,PM-01319,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
 PM_SCHED,1323,1325,PM-01324,PM_FREQ,pm_schedules,frequency_value,14,14,2W,free_text_frequency,
 PM_SCHED,1328,1330,PM-01329,PM_FREQ,pm_schedules,frequency_value,2000,2000,2000 hrs,free_text_frequency,
 PM_SCHED,1330,1332,PM-01331,LAST_DONE_DT,pm_schedules,last_done_date,2026-05-24,24/05/2026,2026-05-24,date_iso,
 PM_SCHED,1331,1333,PM-01332,EQUIP_NO,pm_schedules,asset_id,FD-1022-MTR1,FD-1022-MTR1,,blank_required,
-PM_SCHED,1338,1340,PM-01339,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
+PM_SCHED,1338,1340,PM-01339,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,1343,1345,PM-01344,PM_FREQ,pm_schedules,frequency_value,365,365,Annually,free_text_frequency,
 PM_SCHED,1345,1347,PM-01346,EQUIP_NO,pm_schedules,asset_id,AC-1004,AC-1004,AC-1004 ,whitespace,
 PM_SCHED,1356,1358,PM-01357,PM_FREQ,pm_schedules,frequency_value,2000,2000,2000 run hrs,free_text_frequency,
@@ -798,30 +798,30 @@ PM_SCHED,1501,1503,PM-01502,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly
 PM_SCHED,1508,1510,PM-01509,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
 PM_SCHED,1511,1513,PM-01512,FREQ_UOM,pm_schedules,frequency_unit,DAYS,D,W,unit_mixup,frequency unit recorded as W instead of D
 PM_SCHED,1513,1515,PM-01514,LAST_DONE_DT,pm_schedules,last_done_date,2024-08-18,18/08/2024,08/18/2024,date_mmdd,invalid as DD/MM
-PM_SCHED,1517,1519,PM-01518,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
+PM_SCHED,1517,1519,PM-01518,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
 PM_SCHED,1518,1520,PM-01519,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,1520,1522,PM-01521,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
 PM_SCHED,1523,1525,PM-01524,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
-PM_SCHED,1527,1529,PM-01528,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,1527,1529,PM-01528,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,1528,1530,PM-01529,LAST_DONE_DT,pm_schedules,last_done_date,2025-01-20,20/01/2025,45677,date_excel_serial,Excel serial day number
 PM_SCHED,1530,1532,PM-01531,LAST_DONE_DT,pm_schedules,last_done_date,2025-02-28,28/02/2025,02/28/2025,date_mmdd,invalid as DD/MM
 PM_SCHED,1533,1535,PM-01534,LAST_DONE_DT,pm_schedules,last_done_date,2026-02-15,15/02/2026,02/15/2026,date_mmdd,invalid as DD/MM
-PM_SCHED,1534,1536,PM-01535,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
+PM_SCHED,1534,1536,PM-01535,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
 PM_SCHED,1535,1537,PM-01536,LAST_DONE_DT,pm_schedules,last_done_date,2026-01-10,10/01/2026,01/10/2026,date_mmdd,ambiguous (day<=12)
-PM_SCHED,1536,1538,PM-01537,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
+PM_SCHED,1536,1538,PM-01537,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,1538,1540,PM-01539,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,1541,1543,PM-01542,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
-PM_SCHED,1547,1549,PM-01548,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
+PM_SCHED,1547,1549,PM-01548,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
 PM_SCHED,1549,1551,PM-01550,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,1553,1555,PM-01554,LAST_DONE_DT,pm_schedules,last_done_date,2025-09-20,20/09/2025,45920,date_excel_serial,Excel serial day number
 PM_SCHED,1556,1558,PM-01557,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
-PM_SCHED,1560,1562,PM-01561,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,1560,1562,PM-01561,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,1561,1563,PM-01562,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
 PM_SCHED,1563,1565,PM-01564,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
-PM_SCHED,1564,1566,PM-01565,PM_FREQ,pm_schedules,frequency_value,90,90,90 days,free_text_frequency,
-PM_SCHED,1566,1568,PM-01567,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
+PM_SCHED,1564,1566,PM-01565,PM_FREQ,pm_schedules,frequency_value,90,90,3M,free_text_frequency,
+PM_SCHED,1566,1568,PM-01567,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,1574,1576,PM-01575,LAST_DONE_DT,pm_schedules,last_done_date,2026-05-10,10/05/2026,2026-05-10,date_iso,
-PM_SCHED,1576,1578,PM-01577,PM_FREQ,pm_schedules,frequency_value,90,90,13W,free_text_frequency,
+PM_SCHED,1576,1578,PM-01577,PM_FREQ,pm_schedules,frequency_value,90,90,every 3 months,free_text_frequency,
 PM_SCHED,1580,1582,PM-01581,PM_FREQ,pm_schedules,frequency_value,90,90,quarterly,free_text_frequency,
 PM_SCHED,1588,1590,PM-01589,LAST_DONE_DT,pm_schedules,last_done_date,2025-05-24,24/05/2025,45801,date_excel_serial,Excel serial day number
 PM_SCHED,1597,1599,PM-01598,PM_FREQ,pm_schedules,frequency_value,2000,2000,every 2000 hours,free_text_frequency,

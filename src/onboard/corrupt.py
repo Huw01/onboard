@@ -105,7 +105,7 @@ FREE_TEXT_FREQ: dict[tuple[int, str], list[str]] = {
     (7, "DAYS"): ["weekly", "1W", "7d", "every 1 wk", "Weekly"],
     (14, "DAYS"): ["fortnightly", "2W", "every 2 wks", "14 days"],
     (30, "DAYS"): ["monthly", "1M", "30d", "every month", "Monthly"],
-    (90, "DAYS"): ["quarterly", "3M", "90 days", "every 3 months", "13W"],
+    (90, "DAYS"): ["quarterly", "3M", "90 days", "every 3 months"],
     (180, "DAYS"): ["6M", "semi-annual", "every 6 months", "180d"],
     (365, "DAYS"): ["annual", "1Y", "yearly", "12M", "Annually"],
 }

@@ -4,7 +4,7 @@ PM-00002,CV-1001,Pull-wire and guarding test,T,30,D,ELEC,1,08/04/2025
 PM-00003,CV-1001-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-00004,CV-1001-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00005,CV-1001-MTR2,Motor vibration and thermography,T,90,D,ELEC,1.5,
-PM-00006,CV-1001-GBX1,Gearbox oil sample,T,13W,D,MECH,0.5,26/04/2025
+PM-00006,CV-1001-GBX1,Gearbox oil sample,T,every 3 months,D,MECH,0.5,26/04/2025
 PM-00007,CV-1001-BLT1,Belt thickness survey,T,90,D,MECH,3,
 PM-00008,CV-1002,Belt and idler inspection,T,7,D,MECH,2,21/09/2026
 PM-00009,CV-1002,Pull-wire and guarding test,T,30,D,ELEC,1,17/04/2026
@@ -14,7 +14,7 @@ PM-00012,CV-1002-GBX1,Gearbox oil sample,T,90 days,D,MECH,0.5,
 PM-00013,CV-1002-GBX1,Gearbox oil change,T,365,W,MECH,4,
 PM-00014,CV-1002-GBX2,Gearbox oil sample,T,3M,D,MECH,0.5,22/04/2024
 PM-00015,CV-1002-GBX2,Gearbox oil change,T,365,D,MECH,4,
-PM-00016,CV-1002-BLT1,Belt thickness survey,T,3M,D,MECH,3,11/08/2025
+PM-00016,CV-1002-BLT1,Belt thickness survey,T,quarterly,D,MECH,3,11/08/2025
 PM-00017,CV-1003,Belt and idler inspection,T,7,D,MECH,2,17/09/2026
 PM-00018,CV-1003-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,31/05/2026
 PM-00019,CV-1003-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
@@ -54,11 +54,11 @@ PM-00052,CV-1006-GBX1,Gearbox oil change,T,365,D,MECH,4,
 PM-00053,CV-1006-TPL1,Pulley lagging inspection,T,180,D,MECH,0.5,
 PM-00054,CV-1006-BLT1,Belt thickness survey,T,90,D,MECH,3,28/05/2025
 PM-00055,CV-1007,Belt and idler inspection,T,7,D,MECH,2,26/08/2026
-PM-00056,CV-1007-MTR1,Motor vibration and thermography,T,90 days,D,ELEC,1.5,04/05/2024
+PM-00056,CV-1007-MTR1,Motor vibration and thermography,T,3M,D,ELEC,1.5,04/05/2024
 PM-00057,CV-1007-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00058,CV-1007-GBX1,Gearbox oil sample,T,90,D,MECH,0.5,06/05/2025
 PM-00059,CV-1007-GBX1,Gearbox oil change,T,365,D,MECH,4,
-PM-00060,CV-1007-GBX2,Gearbox oil sample,T,13W,D,MECH,0.5,
+PM-00060,CV-1007-GBX2,Gearbox oil sample,T,every 3 months,D,MECH,0.5,
 PM-00061,CV-1007-GBX2,Gearbox oil change,T,365,D,MECH,4,
 PM-00062,CV-1007-TPL1,Pulley lagging inspection,T,every 6 months,D,MECH,0.5,
 PM-00063,CV-1007-BLT1,Belt thickness survey,T,90,D,MECH,3,
@@ -78,7 +78,7 @@ PM-00076,CV-1009-TPL1,Pulley lagging inspection,T,180,D,MECH,0.5,05/06/2026
 PM-00077,CV-1009-BLT1,Belt thickness survey,T,90,D,MECH,3,18/04/2026
 PM-00078,CV-1010,Belt and idler inspection,T,7,D,MECH,2,10/10/2025
 PM-00079,CV-1010,Pull-wire and guarding test,T,30,D,ELEC,1,02/09/2025
-PM-00080,CV-1010-MTR1,Motor vibration and thermography,T,3M,D,ELEC,1.5,
+PM-00080,CV-1010-MTR1,Motor vibration and thermography,T,quarterly,D,ELEC,1.5,
 PM-00081,CV-1010-MTR2,Motor bearing regrease,M,2000,H,MECH,1,10/03/2024
 PM-00082,CV-1010-GBX1,Gearbox oil sample,T,90,D,MECH,0.5,21/01/2025
 PM-00083,CV-1010-GBX1,Gearbox oil change,T,365,D,MECH,4,
@@ -101,7 +101,7 @@ PM-00099,CV-1012-BLT1   ,Belt thickness survey,T,90,D,MECH,3,26/10/2025
 PM-00100,CV-1013,Belt and idler inspection,T,7,D,MECH,2,12/27/2025
 PM-00101,CV-1013,Pull-wire and guarding test,T,30,D,ELEC,1,19/12/2024
 PM-00102,CV-1013-MTR1,Motor bearing regrease,M,2000,H,MECH,1,09/25/2026
-PM-00103,CV-1013-GBX1,Gearbox oil sample,T,3M,D,MECH,0.5,04/11/2025
+PM-00103,CV-1013-GBX1,Gearbox oil sample,T,quarterly,D,MECH,0.5,04/11/2025
 PM-00104,CV-1013-GBX1,Gearbox oil change,T,365,D,MECH,4,
 PM-00105,CV-1013-HPL1,Pulley lagging inspection,T,180,D,MECH,0.5,
 PM-00106,CV-1013-BLT1,Belt thickness survey,T,90,D,MECH,3,31/10/2025
@@ -109,7 +109,7 @@ PM-00107,CV-1014,Belt and idler inspection,T,7,D,MECH,2,10/06/2026
 PM-00108,CV-1014-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00109,CV-1014-MTR2,Motor vibration and thermography,T,90,D,ELEC,1.5,15/12/2024
 PM-00110,CV-1014-GBX1,Gearbox oil sample,T,90,D,MECH,0.5,16/09/2024
-PM-00111,CV-1014-GBX2,Gearbox oil sample,T,13W,D,MECH,0.5,21/08/2024
+PM-00111,CV-1014-GBX2,Gearbox oil sample,T,every 3 months,D,MECH,0.5,21/08/2024
 PM-00112,CV-1014-HPL1,Pulley lagging inspection,T,semi-annual,D,MECH,0.5,
 PM-00113,CV-1014-TPL1,Pulley lagging inspection,T,180,D,MECH,0.5,16/02/2026
 PM-00114,CV-1014-BLT1,Belt thickness survey,T,90,D,MECH,3,
@@ -125,7 +125,7 @@ PM-00123,CV-1015-TPL1,Pulley lagging inspection,T,180,D,MECH,0.5,
 PM-00124,CV-1015-BLT1,Belt thickness survey,T,90,D,MECH,3,
 PM-00125,CV-1016,Belt and idler inspection,T,7,D,MECH,2,02/01/2026
 PM-00126,CV-1016,Pull-wire and guarding test,T,30,D,ELEC,1,12/10/2024
-PM-00127,CV-1016-MTR1,Motor vibration and thermography,T,90 days,D,ELEC,1.5,
+PM-00127,CV-1016-MTR1,Motor vibration and thermography,T,3M,D,ELEC,1.5,
 PM-00128,CV-1016-MTR1,Motor bearing regrease,M,every 2000 hours,H,MECH,1,06/02/2024
 PM-00129,CV-1016-GBX1,Gearbox oil sample,T,90,D,MECH,0.5,
 PM-00130,CV-1016-GBX2,Gearbox oil sample,T,90,D,MECH,0.5,
@@ -178,7 +178,7 @@ PM-00176,CV-1022,Belt and idler inspection,T,7,D,MECH,2,04/09/2026
 PM-00177,CV-1022-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,2025-12-12
 PM-00178,,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00179,CV-1022-MTR2,Motor bearing regrease,M,2000,H,MECH,1,
-PM-00180,CV-1022-GBX1,Gearbox oil sample,T,every 3 months,D,MECH,0.5,10/12/2025
+PM-00180,CV-1022-GBX1,Gearbox oil sample,T,90 days,D,MECH,0.5,10/12/2025
 PM-00181,CV-1022-GBX1,Gearbox oil change,T,annual,D,MECH,4,
 PM-00182,CV-1022-HPL1,Pulley lagging inspection,T,180,D,MECH,0.5,
 PM-00183,CV-1022-TPL1,Pulley lagging inspection,T,180,D,MECH,0.5,12/02/2025
@@ -220,7 +220,7 @@ PM-00218,CV-1027-HPL1,Pulley lagging inspection,T,180,D,MECH,0.5,
 PM-00219,CV-1027-BLT1,Belt thickness survey,T,90,D,MECH,3,06/13/2025
 PM-00220,CV-1028,Belt and idler inspection,T,7,D,MECH,2,07/06/2025
 PM-00221,CV-1028,Pull-wire and guarding test,T,30,D,ELEC,1,
-PM-00222,CV-1028-MTR1,Motor vibration and thermography,T,13W,D,ELEC,1.5,16/01/2026
+PM-00222,CV-1028-MTR1,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,16/01/2026
 PM-00223,CV-1028-MTR1,Motor bearing regrease,M,2000,H,MECH,1,30/04/2026
 PM-00224,CV-1028-MTR2,Motor vibration and thermography,T,90,D,ELEC,1.5,11/06/2025
 PM-00225,CV-1028-MTR2,Motor bearing regrease,M,2000,H,MECH,1,11/06/2026
@@ -272,7 +272,7 @@ PM-00270,CV-1035,Belt and idler inspection,T,7,D,MECH,2,16/06/2026
 PM-00271,CV-1035,Pull-wire and guarding test,T,every month,D,ELEC,1,08/11/2026
 PM-00272,CV-1035-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,04/11/2024
 PM-00273,CV-1035-MTR1,Motor bearing regrease,M,every 2000 hours,H,MECH,1,11/12/2024
-PM-00274,CV-1035-MTR2,Motor vibration and thermography,T,3M,D,ELEC,1.5,18/01/2026
+PM-00274,CV-1035-MTR2,Motor vibration and thermography,T,quarterly,D,ELEC,1.5,18/01/2026
 PM-00275,CV-1035-MTR2,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00276,CV-1035-GBX1,Gearbox oil sample,T,90,D,MECH,0.5,
 PM-00277,CV-1035-GBX1,Gearbox oil change,T,365,D,MECH,4,
@@ -327,7 +327,7 @@ PM-00325,CV-1041-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,26/01/202
 PM-00326,CV-1041-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00327,CV-1041-MTR2,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-00328,CV-1041-MTR2,Motor bearing regrease,M,2000,H,MECH,1,12/05/2026
-PM-00329,CV-1041-GBX1,Gearbox oil sample,T,13W,D,MECH,0.5,
+PM-00329,CV-1041-GBX1,Gearbox oil sample,T,every 3 months,D,MECH,0.5,
 PM-00330,CV-1041-GBX1,Gearbox oil change,T,365,D,MECH,4,
 PM-00331,CV-1041-GBX2,Gearbox oil sample,T,90,D,MECH,0.5,
 PM-00332,CV-1041-HPL1,Pulley lagging inspection,T,180,D,MECH,0.5,
@@ -345,7 +345,7 @@ PM-00343,CV-1043,Pull-wire and guarding test,T,30d,D,ELEC,1,16/04/2024
 PM-00344,CV-1043-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,20/09/2024
 PM-00345,CV-1043-GBX1,Gearbox oil sample,T,90,D,MECH,0.5,
 PM-00346,CV-1043-GBX1,Gearbox oil change,T,annual,D,MECH,4,
-PM-00347,CV-1043-GBX2,Gearbox oil sample,T,13W,D,MECH,0.5,
+PM-00347,CV-1043-GBX2,Gearbox oil sample,T,every 3 months,D,MECH,0.5,
 PM-00348,CV-1043-GBX2,Gearbox oil change,T,365,D,MECH,4,
 PM-00349,CV-1043-HPL1,Pulley lagging inspection,T,180,D,MECH,0.5,06/11/2025
 PM-00350,CV-1044,Belt and idler inspection,T,7,D,MECH,2,23/06/2026
@@ -369,7 +369,7 @@ PM-00367,CV-1046-GBX1,Gearbox oil sample,T,90,D,MECH,0.5,12/02/2026
 PM-00368,CV-1046-TPL1,Pulley lagging inspection,T,180d,D,MECH,0.5,25/08/2026
 PM-00369, CV-1047 ,Belt and idler inspection,T,7,D,MECH,2,24/05/2026
 PM-00370,CV-1047,Pull-wire and guarding test,T,30,D,ELEC,1,
-PM-00371,CV-1047-MTR1,Motor vibration and thermography,T,13W,D,ELEC,1.5,
+PM-00371,CV-1047-MTR1,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,
 PM-00372,CV-1047-MTR1,Motor bearing regrease,M,2000,H,MECH,1,09/06/2026
 PM-00373,CV-1047-MTR2,Motor bearing regrease,M,2000,H,MECH,1,12/06/2025
 PM-00374,CV-1047-GBX1,Gearbox oil sample,T,90,D,MECH,0.5,10/05/2026
@@ -399,7 +399,7 @@ PM-00397,CV-1050-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00398,CV-1050-MTR2,Motor vibration and thermography,T,90,D,ELEC,1.5,04/12/2024
 PM-00399,CV-1050-GBX1,Gearbox oil sample,T,90,D,MECH,0.5,
 PM-00400,CV-1050-GBX1,Gearbox oil change,T,1Y,D,MECH,4,
-PM-00401,CV-1050-GBX2,Gearbox oil sample,T,13W,D,MECH,0.5,
+PM-00401,CV-1050-GBX2,Gearbox oil sample,T,every 3 months,D,MECH,0.5,
 PM-00402,CV-1050-GBX2,Gearbox oil change,T,365,D,MECH,4,
 PM-00403,CV-1050-TPL1,Pulley lagging inspection,T,180,D,MECH,0.5,02/25/2025
 PM-00404,CV-1050-BLT1,,T,90,D,MECH,3,
@@ -441,7 +441,7 @@ PM-00439,CV-1055,Belt and idler inspection,T,every 1 wk,D,MECH,2,27/09/2026
 PM-00440,CV-1055,Pull-wire and guarding test,T,30,D,ELEC,1,22/02/2025
 PM-00441,CV-1055-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-00442,CV-1055-MTR1,Motor bearing regrease,M,2000 run hrs,H,MECH,1,05/07/2024
-PM-00443,CV-1055-GBX1,Gearbox oil sample,T,13W,D,MECH,0.5,04/02/2026
+PM-00443,CV-1055-GBX1,Gearbox oil sample,T,every 3 months,D,MECH,0.5,04/02/2026
 PM-00444,CV-1055-GBX2,Gearbox oil sample,T,90,D,MECH,0.5,26/03/2024
 PM-00445,CV-1055-GBX2,Gearbox oil change,T,annual,D,MECH,4,
 PM-00446,CV-1055-TPL1,Pulley lagging inspection,T,180,D,MECH,0.5,31/05/2026
@@ -452,14 +452,14 @@ PM-00450,CV-1056-MTR1,Motor vibration and thermography,T,3M,D,ELEC,1.5,
 PM-00451,CV-1056-GBX1,Gearbox oil sample,T,90,D,MECH,0.5,45938
 PM-00452,CV-1056-GBX1,Gearbox oil change,T,365,D,MECH,4,
 PM-00453,CV-1057,Belt and idler inspection,T,7,D,MECH,2,17/08/2026
-PM-00454,CV-1057-MTR1,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,06/03/2025
+PM-00454,CV-1057-MTR1,Motor vibration and thermography,T,90 days,D,ELEC,1.5,06/03/2025
 PM-00455,CV-1057-GBX1,Gearbox oil sample,T,90,D,MECH,0.5,
 PM-00456,CV-1057-HPL1,Pulley lagging inspection,T,180,W,MECH,0.5,
 PM-00457,CV-1057-BLT1,Belt thickness survey,T,90,D,MECH,3,
 PM-00458,CV-1058,Belt and idler inspection,T,7,D,MECH,2,05/09/2026
 PM-00459,CV-1058-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-00460,CV-1058-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
-PM-00461,CV-1058-MTR2,Motor vibration and thermography,T,13W,D,ELEC,1.5,20/08/2026
+PM-00461,CV-1058-MTR2,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,20/08/2026
 PM-00462,CV-1058-MTR2,Motor bearing regrease,M,2000,H,MECH,1,03/12/2024
 PM-00463,CV-1058-GBX1,Gearbox oil sample,T,90,D,MECH,0.5,
 PM-00464,CV-1058-GBX1,Gearbox oil change,T,365,D,MECH,4,05/02/2026
@@ -520,7 +520,7 @@ PM-00518,CR-1004-LUB1,Lube filter change,T,30,D,MECH,1,08/02/2025
 PM-00519,CR-1004-HPU1,Hydraulic oil sample,T,90,D,MECH,0.5,
 PM-00520,CR-1005,Liner wear measurement,T,14,D,MECH,3,31/01/2025
 PM-00521,CR-1005,Crusher major service,M,2000,H,MECH,24,
-PM-00522,CR-1005-MTR1,Motor vibration and thermography,T,13W,D,ELEC,1.5,11/05/2024
+PM-00522,CR-1005-MTR1,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,11/05/2024
 PM-00523,CR-1005-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00524,CR-1005-LUB1,Lube filter change,T,30,D,MECH,1,12/04/2025
 PM-00525,CR-1005-HPU1,Hydraulic oil sample,T,90,D,MECH,0.5,
@@ -529,7 +529,7 @@ PM-00527,CR-1006,Crusher major service,M,2000,H,MECH,24,27/04/2026
 PM-00528,CR-1006-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-00529,CR-1006-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00530,CR-1006-LUB1,Lube filter change,T,monthly,D,MECH,1,06/28/2026
-PM-00531,CR-1006-HPU1,Hydraulic oil sample,T,13W,D,MECH,0.5,
+PM-00531,CR-1006-HPU1,Hydraulic oil sample,T,every 3 months,D,MECH,0.5,
 PM-00532,CR-1007,Liner wear measurement,T,14,D,MECH,3,09/09/2026
 PM-00533,CR-1007,Crusher major service,M,2000,H,MECH,24,
 PM-00534,CR-1007-MTR1,Motor vibration and thermography,T,quarterly,D,ELEC,1.5,
@@ -820,7 +820,7 @@ PM-00818,PP-1002-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,2025-10-2
 PM-00819,PP-1002-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00820,PP-1003-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00821,PP-1004,Pump inspection,T,Monthly,D,MECH,1,14/06/2025
-PM-00822,PP-1004-MTR1,Motor vibration and thermography,T,13W,D,ELEC,1.5,13/02/2025
+PM-00822,PP-1004-MTR1,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,13/02/2025
 PM-00823,PP-1004-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00824,PP-1005,Pump overhaul,M,8000 run hrs,H,MECH,16,
 PM-00825,PP-1005-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,
@@ -871,7 +871,7 @@ PM-00869,PP-1022-MTR1,Motor vibration and thermography,T,90 days,D,ELEC,1.5,
 PM-00870,PP-1023,Pump inspection,T,30,D,MECH,1,
 PM-00871,PP-1023,Pump overhaul,M,8000,H,MECH,16,
 PM-00872,PP-1024,Pump inspection,T,30,D,MECH,1,06/05/2024
-PM-00873,PP-1024-MTR1,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,
+PM-00873,PP-1024-MTR1,Motor vibration and thermography,T,90 days,D,ELEC,1.5,
 PM-00874,PP-1025,Pump inspection,T,30,D,MECH,1,12/08/2026
 PM-00875,PP-1025-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-00876,PP-1025-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
@@ -911,7 +911,7 @@ PM-00909,PP-1038,Pump overhaul,M,8000H,H,MECH,16,
 PM-00910,PP-1038-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-00911,PP-1038-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00912,PP-1039,Pump inspection,T,30,D,MECH,1,08/01/2025
-PM-00913,PP-1039-MTR1,Motor vibration and thermography,T,13W,D,ELEC,1.5,
+PM-00913,PP-1039-MTR1,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,
 PM-00914,PP-1039-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00915,PP-1040-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,07/01/2024
 PM-00916,PP-1041,Pump inspection,T,30,D,MECH,1,07/05/2026
@@ -938,7 +938,7 @@ PM-00936,PP-1048,Pump overhaul,M,8000,H,MECH,16,11/01/2025
 PM-00937,PP-1048-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-00938,PP-1048-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-00939,PP-1049,Pump inspection,T,30,D,MECH,1,18/11/2024
-PM-00940,PP-1049-MTR1,Motor vibration and thermography,T,13W,D,ELEC,1.5,15/02/2026
+PM-00940,PP-1049-MTR1,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,15/02/2026
 PM-00941,PP-1050,Pump inspection,T,30,D,MECH,1,08/10/2025
 PM-00942,PP-1050-MTR1,Motor vibration and thermography,T,90 days,D,ELEC,1.5,
 PM-00943,PP-1051,Pump inspection,T,30,D,MECH,1,03/12/2024
@@ -985,7 +985,7 @@ PM-00983,PP-1067,Pump overhaul,M,8000,H,MECH,16,
 PM-00984,PP-1067-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,05/04/2025
 PM-00985,PP-1068,Pump inspection,T,30,D,MECH,1,28/09/2026
 PM-00986,PP-1069,Pump inspection,T,30,D,MECH,1,04/01/2026
-PM-00987,PP-1069-MTR1,Motor vibration and thermography,T,90 days,D,ELEC,1.5,25/06/2025
+PM-00987,PP-1069-MTR1,Motor vibration and thermography,T,3M,D,ELEC,1.5,25/06/2025
 PM-00988,PP-1070,Pump inspection,T,30,D,MECH,1,01/06/2025
 PM-00989,PP-1070,Pump overhaul,M,8000,H,MECH,16,19/06/2024
 PM-00990,PP-1070-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,2024-12-06
@@ -1118,7 +1118,7 @@ PM-01116,BS-1001-BAT3,Container thermal scan,T,30,D,ELEC,1,11/11/2025
 PM-01117,BS-1001-BAT4,Battery module SOH review,M,300,CYC,ELEC,2,01/07/2026
 PM-01118,BS-1001-BAT4,Container thermal scan,T,30,D,ELEC,1,26/09/2026
 PM-01119,BS-1001-HVC1,HVAC filter change,T,90,D,MECH,1,
-PM-01120,BS-1001-HVC2,HVAC filter change,T,13W,D,MECH,1,
+PM-01120,BS-1001-HVC2,HVAC filter change,T,every 3 months,D,MECH,1,
 PM-01121,BS-1001-HVC2,HVAC service,M,2000,H,MECH,3,2024-12-26
 PM-01122,BS-1001-HVC3,HVAC filter change,T,90,D,MECH,1,26/06/2026
 PM-01123,BS-1001-HVC4,HVAC filter change,T,90,D,MECH,1,
@@ -1129,7 +1129,7 @@ PM-01127,BS-1001-TX1,Transformer oil DGA sample,T,365,D,HV,1,
 PM-01128,BS-1002,BESS monthly site inspection,T,Monthly,D,ELEC,4,25/07/2025
 PM-01129,BS-1002,BESS annual capacity test,T,365,D,ELEC,16,02/08/2025
 PM-01130,BS-1002,BESS throughput health check,M,500 MWh,MWH,ELEC,6,15/08/2026
-PM-01131,BS-1002-PCS1,Inverter filter clean and IR scan,T,3M,D,ELEC,3,
+PM-01131,BS-1002-PCS1,Inverter filter clean and IR scan,T,quarterly,D,ELEC,3,
 PM-01132,BS-1002-PCS2,Inverter filter clean and IR scan,T,90,D,ELEC,3,
 PM-01133,BS-1002-BAT1,Battery module SOH review,M,300,CYC,ELEC,2,14/06/2026
 PM-01134,BS-1002-BAT2,Battery module SOH review,M,300,CYC,ELEC,2,
@@ -1142,7 +1142,7 @@ PM-01140,BS-1002-HVC1,HVAC service,M,2000,H,MECH,3,20/01/2026
 PM-01141,BS-1002-HVC2,HVAC filter change,T,90,D,MECH,1,
 PM-01142,BS-1002-HVC3,HVAC filter change,T,90,D,MECH,1,
 PM-01143,BS-1002-HVC3,HVAC service,M,2000,H,MECH,3,
-PM-01144,BS-1002-HVC4,HVAC filter change,T,90 days,D,MECH,1,14/07/2026
+PM-01144,BS-1002-HVC4,HVAC filter change,T,3M,D,MECH,1,14/07/2026
 PM-01145,BS-1002-HVC4,HVAC service,M,2000,H,MECH,3,
 PM-01146,BS-1002-FSS1,Fire suppression inspection,T,180,D,INST,2,
 PM-01147,BS-1002-TX1,Transformer visual inspection,T,30,D,HV,0.5,10/10/2025
@@ -1150,7 +1150,7 @@ PM-01148,BS-1002-TX1,Transformer oil DGA sample,T,365,D,HV,1,
 PM-01149,BS-1003,BESS monthly site inspection,T,30,D,ELEC,4,12/03/2026
 PM-01150,BS-1003,BESS annual capacity test,T,365,D,ELEC,16,10/12/2025
 PM-01151,BS-1003	,BESS throughput health check,M,500,MWH,ELEC,6,
-PM-01152,BS-1003-PCS1,Inverter filter clean and IR scan,T,13W,D,ELEC,3,
+PM-01152,BS-1003-PCS1,Inverter filter clean and IR scan,T,every 3 months,D,ELEC,3,
 PM-01153,BS-1003-PCS2,Inverter filter clean and IR scan,T,90,D,ELEC,3,29/11/2024
 PM-01154,BS-1003-BAT1,Battery module SOH review,M,300,CYC,ELEC,2,
 PM-01155,BS-1003-BAT1,Container thermal scan,T,30,D,ELEC,1,01/08/2025
@@ -1183,7 +1183,7 @@ PM-01181,BS-1004-BAT4,Battery module SOH review,M,300,CYC,ELEC,2,
 PM-01182,BS-1004-BAT4,Container thermal scan,T,30,D,ELEC,1,27/04/2025
 PM-01183,BS-1004-HVC1,HVAC filter change,T,90,D,MECH,1,21/11/2024
 PM-01184,BS-1004-HVC1,HVAC service,M,2000,H,MECH,3,11/11/2025
-PM-01185,BS-1004-HVC2,HVAC filter change,T,13W,D,MECH,1,
+PM-01185,BS-1004-HVC2,HVAC filter change,T,every 3 months,D,MECH,1,
 PM-01186,BS-1004-HVC3,HVAC filter change,T,90,D,MECH,1,22/08/2025
 PM-01187,BS-1004-HVC4,HVAC filter change,T,90,D,MECH,1,
 PM-01188,BS-1004-FSS1,Fire suppression inspection,T,180,D,INST,2,
@@ -1232,7 +1232,7 @@ PM-01230,SC-1001-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01231,SC-1001-MTR2,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-01232,SC-1001-MTR2,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01233,SC-1002,Screen deck inspection,T,7,D,MECH,1.5,01/08/2026
-PM-01234,SC-1002-MTR1,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,02/08/2025
+PM-01234,SC-1002-MTR1,Motor vibration and thermography,T,90 days,D,ELEC,1.5,02/08/2025
 PM-01235,SC-1002-MTR1,Motor bearing regrease,M,every 2000 hours,H,MECH,1,03/13/2026
 PM-01236,SC-1003,Screen deck inspection,T,7,D,MECH,1.5,15/06/2026
 PM-01237,SC-1003-MTR1,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,
@@ -1279,7 +1279,7 @@ PM-01277,SC-1019,Screen deck inspection,T,Weekly,D,MECH,1.5,02/03/2026
 PM-01278,SC-1019-MTR1,Motor bearing regrease,M,2000,H,MECH,1,08/29/2026
 PM-01279,SC-1019-MTR2,Motor vibration and thermography,T,90,D,ELEC,1.5,29/05/2024
 PM-01280,SC-1020,Screen deck inspection,T,7,D,MECH,1.5,12/11/2025
-PM-01281,SC-1020-MTR1,Motor vibration and thermography,T,13W,D,ELEC,1.5,09/02/2026
+PM-01281,SC-1020-MTR1,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,09/02/2026
 PM-01282,SC-1020-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01283,FD-1001,Feeder pan and chain inspection,T,14 days,D,MECH,2,06/15/2026
 PM-01284,FD-1001-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,
@@ -1308,7 +1308,7 @@ PM-01306,FD-1011-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01307,FD-1012,Feeder pan and chain inspection,T,14,D,MECH,2,45954
 PM-01308,FD-1012-MTR1,Motor bearing regrease,M,2000,H,MECH,1,08/09/2025
 PM-01309,FD-1013,Feeder pan and chain inspection,T,14,D,MECH,2,31/03/2025
-PM-01310,FD-1013-MTR1,Motor vibration and thermography,T,90 days,D,ELEC,1.5,13/04/2026
+PM-01310,FD-1013-MTR1,Motor vibration and thermography,T,3M,D,ELEC,1.5,13/04/2026
 PM-01311,FD-1013-MTR1,Motor bearing regrease,M,2000,H,MECH,1,10/07/2026
 PM-01312,FD-1014-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-01313,FD-1014-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
@@ -1317,7 +1317,7 @@ PM-01315,FD-1016,Feeder pan and chain inspection,T,14,D,MECH,2,30/09/2026
 PM-01316,FD-1016-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,31/05/2025
 PM-01317,FD-1016-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01318,FD-1017,Feeder pan and chain inspection,T,14,D,MECH,2,10/11/2025
-PM-01319,FD-1017-MTR1,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,06/01/2025
+PM-01319,FD-1017-MTR1,Motor vibration and thermography,T,90 days,D,ELEC,1.5,06/01/2025
 PM-01320,FD-1017-MTR1,Motor bearing regrease,M,2000,H,MECH,1,11/06/2024
 PM-01321,FD-1018,Feeder pan and chain inspection,T,14,D,MECH,2,14/08/2026
 PM-01322,FD-1018-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,
@@ -1337,7 +1337,7 @@ PM-01335,FD-1024,Feeder pan and chain inspection,T,14,D,MECH,2,30/04/2025
 PM-01336,FD-1024-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-01337,FD-1024-MTR1,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01338,AC-1001,Compressor service,M,2000,H,MECH,4,
-PM-01339,AC-1001-MTR1,Motor vibration and thermography,T,3M,D,ELEC,1.5,
+PM-01339,AC-1001-MTR1,Motor vibration and thermography,T,quarterly,D,ELEC,1.5,
 PM-01340,AC-1002,Compressor service,M,2000,H,MECH,4,
 PM-01341,AC-1002,Air receiver inspection,T,365,D,INST,2,
 PM-01342,AC-1002-MTR1,Motor vibration and thermography,T,90,D,ELEC,1.5,26/12/2024
@@ -1516,7 +1516,7 @@ PM-01514,SR-1003-MTR2,Motor vibration and thermography,T,90,D,ELEC,1.5,08/18/202
 PM-01515,SR-1003-MTR2,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01516,SR-1003-BLT1,Belt thickness survey,T,90,D,MECH,3,15/06/2026
 PM-01517,SR-1004,Slew bearing inspection,T,90,D,MECH,6,28/07/2026
-PM-01518,SR-1004-MTR1,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,08/03/2026
+PM-01518,SR-1004-MTR1,Motor vibration and thermography,T,90 days,D,ELEC,1.5,08/03/2026
 PM-01519,SR-1004-MTR2,Motor vibration and thermography,T,quarterly,D,ELEC,1.5,
 PM-01520,SR-1004-BLT1,Belt thickness survey,T,90,D,MECH,3,
 PM-01521,MT-5001,Motor vibration and thermography,T,3M,D,ELEC,1.5,29/04/2026
@@ -1526,16 +1526,16 @@ PM-01524,MT-5003,Motor vibration and thermography,T,quarterly,D,ELEC,1.5,
 PM-01525,MT-5003,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01526,MT-5004,Motor vibration and thermography,T,90,D,ELEC,1.5,03/10/2025
 PM-01527,MT-5004,Motor bearing regrease,M,2000,H,MECH,1,
-PM-01528,MT-5005,Motor vibration and thermography,T,13W,D,ELEC,1.5,23/06/2026
+PM-01528,MT-5005,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,23/06/2026
 PM-01529,MT-5005,Motor bearing regrease,M,2000,H,MECH,1,45677
 PM-01530,MT-5006,Motor vibration and thermography,T,90,D,ELEC,1.5,01/07/2025
 PM-01531,MT-5008,Motor bearing regrease,M,2000,H,MECH,1,02/28/2025
 PM-01532,MT-5009,Motor vibration and thermography,T,90,D,ELEC,1.5,04/06/2025
 PM-01533,MT-5011,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-01534,MT-5012,Motor vibration and thermography,T,90,D,ELEC,1.5,02/15/2026
-PM-01535,MT-5013,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,08/06/2024
+PM-01535,MT-5013,Motor vibration and thermography,T,90 days,D,ELEC,1.5,08/06/2024
 PM-01536,MT-5013,Motor bearing regrease,M,2000,H,MECH,1,01/10/2026
-PM-01537,MT-5014,Motor vibration and thermography,T,3M,D,ELEC,1.5,
+PM-01537,MT-5014,Motor vibration and thermography,T,quarterly,D,ELEC,1.5,
 PM-01538,MT-5014,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01539,MT-5015,Motor vibration and thermography,T,quarterly,D,ELEC,1.5,
 PM-01540,MT-5016,Motor vibration and thermography,T,90,D,ELEC,1.5,
@@ -1546,7 +1546,7 @@ PM-01544,MT-5018,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01545,MT-5019,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01546,MT-5020,Motor vibration and thermography,T,90,D,ELEC,1.5,18/06/2024
 PM-01547,MT-5020,Motor bearing regrease,M,2000,H,MECH,1,
-PM-01548,MT-5021,Motor vibration and thermography,T,90 days,D,ELEC,1.5,
+PM-01548,MT-5021,Motor vibration and thermography,T,3M,D,ELEC,1.5,
 PM-01549,MT-5022,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01550,MT-5024,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,06/03/2026
 PM-01551,MT-5024,Motor bearing regrease,M,2000,H,MECH,1,03/05/2026
@@ -1559,13 +1559,13 @@ PM-01557,MT-5029,Motor vibration and thermography,T,90 days,D,ELEC,1.5,
 PM-01558,MT-5030,Motor vibration and thermography,T,90,D,ELEC,1.5,29/08/2025
 PM-01559,MT-5030,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01560,MT-5031,Motor bearing regrease,M,2000,H,MECH,1,25/02/2026
-PM-01561,MT-5032,Motor vibration and thermography,T,13W,D,ELEC,1.5,
+PM-01561,MT-5032,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,
 PM-01562,MT-5033,Motor vibration and thermography,T,3M,D,ELEC,1.5,29/08/2024
 PM-01563,MT-5033,Motor bearing regrease,M,2000,H,MECH,1,10/02/2025
 PM-01564,MT-5034,Motor vibration and thermography,T,3M,D,ELEC,1.5,15/04/2026
-PM-01565,MT-5035,Motor vibration and thermography,T,90 days,D,ELEC,1.5,15/12/2025
+PM-01565,MT-5035,Motor vibration and thermography,T,3M,D,ELEC,1.5,15/12/2025
 PM-01566,MT-5035,Motor bearing regrease,M,2000,H,MECH,1,
-PM-01567,MT-5036,Motor vibration and thermography,T,3M,D,ELEC,1.5,15/07/2026
+PM-01567,MT-5036,Motor vibration and thermography,T,quarterly,D,ELEC,1.5,15/07/2026
 PM-01568,MT-5037,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-01569,MT-5037,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01570,MT-5038,Motor vibration and thermography,T,90,D,ELEC,1.5,25/11/2024
@@ -1575,7 +1575,7 @@ PM-01573,MT-5041,Motor vibration and thermography,T,90,D,ELEC,1.5,
 PM-01574,MT-5041,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01575,MT-5042,Motor vibration and thermography,T,90,D,ELEC,1.5,2026-05-10
 PM-01576,MT-5043,Motor vibration and thermography,T,90,D,ELEC,1.5,22/06/2024
-PM-01577,MT-5044,Motor vibration and thermography,T,13W,D,ELEC,1.5,
+PM-01577,MT-5044,Motor vibration and thermography,T,every 3 months,D,ELEC,1.5,
 PM-01578,MT-5044,Motor bearing regrease,M,2000,H,MECH,1,
 PM-01579,MT-5045,Motor vibration and thermography,T,90,D,ELEC,1.5,07/09/2024
 PM-01580,MT-5045,Motor bearing regrease,M,2000,H,MECH,1,
