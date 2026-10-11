@@ -1,0 +1,199 @@
+{
+ "task": "map",
+ "key": "5bb6b72757cb37ea",
+ "model": "grok-4.7",
+ "recorded_at": "2026-10-11T19:06:33+00:00",
+ "latency_s": 152.481,
+ "reasoning_effort": "default (high)",
+ "usage": {
+  "prompt_tokens": 6277,
+  "cached_tokens": 1152,
+  "completion_tokens": 4611,
+  "reasoning_tokens": 17347,
+  "cost_usd": 0.142574,
+  "cost_exact": true
+ },
+ "messages": [
+  {
+   "role": "system",
+   "content": "You map legacy enterprise-system exports onto a target schema.\nYou get a profile of every sheet and column of an export you have never seen, and the\ntarget schema. Decide:\n- which target table each sheet feeds (\"none\" if it feeds no table),\n- which target field each source column feeds (\"none\" if it has no target),\n- for coded target fields, what each observed legacy code means in the target's\n  allowed values,\n- which date format the export uses for dates (the majority format).\nRules:\n- Base every decision on the column names, values and shapes in the profile.\n- For every observed code of a coded column, say how it relates to the target value:\n  \"same_meaning\": the code denotes exactly that value. Abbreviations (CONV = CONVEYOR),\n    standard rank letters (A/B/C = 1/2/3 when 1 is the highest rank) and status or unit\n    codes whose meaning is clear from the column all count, with no arithmetic needed.\n  \"needs_conversion\": the value only matches after a calculation (weeks vs days, miles vs\n    km, kWh vs MWh, minutes vs hours).\n  \"uncertain\": the code could plausibly mean something else.\n  Only \"same_meaning\" translations are applied automatically; the rest go to a person.\n  Never guess: a wrong translation silently corrupts data.\n- Give each decision a confidence between 0 and 1 and a one-line reason."
+  },
+  {
+   "role": "user",
+   "content": "TARGET SCHEMA\ntable locations:\n  - location_id: unique location code, e.g. GR-CONV-04\n  - site_id: code of the site the location belongs to\n  - parent_location_id: location code of the parent location (blank for a site)\n  - name: human-readable location name\n  - location_type: level in the hierarchy: SITE, AREA or SYSTEM [allowed: SITE, AREA, SYSTEM]\ntable assets:\n  - asset_id: unique asset tag\n  - description: asset description\n  - asset_class: equipment class [allowed: CONVEYOR, CRUSHER, HAUL_TRUCK, PUMP, BESS, SCREEN, FEEDER, COMPRESSOR, TRANSFORMER, FAN, STACKER_RECLAIMER, MOTOR, GEARBOX, PULLEY, BELT, LUBE_SYSTEM, HPU, ENGINE, TRANSMISSION, FINAL_DRIVE, PCS, BATTERY_CONTAINER, HVAC, FIRE_SUPPRESSION]\n  - parent_asset_id: asset tag of the parent asset (blank for top-level assets)\n  - location_id: location code where the asset is installed\n  - criticality: 1 = most critical, 3 = least critical [allowed: 1, 2, 3]\n  - manufacturer: manufacturer name\n  - model: model number\n  - serial_number: serial number\n  - install_date: date the asset was installed\n  - meter_type: what the asset's meter counts: HOURS, KM, CYCLES, MWH, or NONE [allowed: HOURS, KM, CYCLES, MWH, NONE]\n  - status: ACTIVE or INACTIVE [allowed: ACTIVE, INACTIVE]\ntable pm_schedules:\n  - pm_id: unique preventive-maintenance schedule ID\n  - asset_id: asset tag the PM applies to\n  - description: PM task description\n  - trigger_type: TIME (calendar) or METER (usage) based [allowed: TIME, METER]\n  - frequency_value: interval between PMs, a number\n  - frequency_unit: unit of the interval: DAYS, HOURS, KM, CYCLES or MWH [allowed: DAYS, HOURS, KM, CYCLES, MWH]\n  - craft: trade that does the work (MECH, ELEC, INST, HV)\n  - est_labor_hours: estimated labor hours per occurrence\n  - last_done_date: date the PM was last completed\ntable work_orders:\n  - wo_id: unique work order number\n  - asset_id: asset tag the work was done on\n  - pm_id: PM schedule that generated the work order (blank if not a PM)\n  - wo_type: PM (preventive), CM (corrective) or EM (emergency) [allowed: PM, CM, EM]\n  - status: OPEN, IN_PROGRESS, COMPLETED or CANCELLED [allowed: OPEN, IN_PROGRESS, COMPLETED, CANCELLED]\n  - priority: 1 (highest) to 4\n  - description: work description\n  - reported_date: date the work order was raised\n  - scheduled_date: date the work was scheduled for\n  - completed_date: date the work was completed (blank if not completed)\n  - labor_hours: actual labor hours booked\n\nEXPORT PROFILE (JSON)\n[{\"sheet\":\"LOCATIONS\",\"rows\":43,\"columns\":[{\"name\":\"LOC_CD\",\"filled\":43,\"distinct\":43,\"shapes\":{\"A+-A+-99\":30,\"A+-A+\":11,\"A+\":2},\"samples\":[\"GR\",\"GR-CRSH-02\",\"GR-PLNT-01\",\"GR-DWTR-03\",\"GR-TSHOP-02\",\"PH-STKY-01\"]},{\"name\":\"LOC_DESC\",\"filled\":43,\"distinct\":43,\"shapes\":{\"A+ A+ - A+ A+\":9,\"A+ A+\":6,\"A+ - A+ A+\":6,\"A+ A+ - A+\":4},\"samples\":[\"Granite Ridge Mine\",\"Primary Crushing - Crusher 2 Building\",\"Concentrator Plant - Grinding\",\"Dewatering - Tailings Return\",\"Truck Shop - Wash Bay\",\"Stockyard - Stacker Line\"]},{\"name\":\"PARENT_LOC\",\"filled\":41,\"distinct\":13,\"shapes\":{\"A+-A+\":30,\"A+\":11},\"samples\":[\"GR\",\"GR-CRSH\",\"GR\",\"GR-DWTR\",\"GR-PWR\",\"PH-RAIL\"],\"values\":{\"GR\":7,\"GR-CONV\":4,\"GR-PLNT\":4,\"PH\":4,\"GR-PIT\":3,\"GR-DWTR\":3,\"GR-PWR\":3,\"GR-TSHOP\":3,\"GR-CRSH\":2,\"PH-RAIL\":2,\"PH-STKY\":2,\"PH-SHIP\":2,\"PH-PWR\":2}},{\"name\":\"SITE_CD\",\"filled\":43,\"distinct\":2,\"shapes\":{\"A+\":43},\"samples\":[\"GR\",\"GR\",\"GR\",\"GR\",\"GR\",\"PH\"],\"values\":{\"GR\":30,\"PH\":13}},{\"name\":\"LOC_TYPE\",\"filled\":43,\"distinct\":3,\"shapes\":{\"A+\":43},\"samples\":[\"SITE\",\"SYS\",\"SYS\",\"SYS\",\"SYS\",\"SYS\"],\"values\":{\"SYS\":30,\"AREA\":11,\"SITE\":2}}]},{\"sheet\":\"EQUIPMENT\",\"rows\":1282,\"columns\":[{\"name\":\"EQUIP_NO\",\"filled\":1282,\"distinct\":1270,\"shapes\":{\"A+-9999-A+9\":838,\"A+-9999\":428,\"A+ 9999-A+9\":4,\"A+9999-A+9\":4},\"samples\":[\"CV-1001\",\"CV-1030-TPL1\",\"CV-1060-TPL1\",\"HT-1041\",\"PP-1096-MTR1\",\"FD-1017\"]},{\"name\":\"EQUIP_DESC\",\"filled\":1272,\"distinct\":1260,\"shapes\":{\"A+ A+ - A+-9999\":542,\"A+ A+ A+-9999\":332,\"A+ A+ 9 - A+-9999\":183,\"A+ A+ 999A A+-9999\":46},\"samples\":[\"Belt conveyor CV-1001\",\"Tail pulley - CV-1030\",\"Conveyor belt - CV-1060\",\"Transmission - HT-1041\",\"Drive motor - PP-1098\",\"Drive motor - FD-1018\"]},{\"name\":\"EQ_CLASS\",\"filled\":1275,\"distinct\":24,\"shapes\":{\"A+\":1275},\"samples\":[\"CONV\",\"BELT\",\"PULY\",\"HTRK\",\"PUMP\",\"MOTR\"],\"values\":{\"MOTR\":390,\"PULY\":123,\"PUMP\":121,\"GBOX\":97,\"BELT\":67,\"CONV\":62,\"HTRK\":48,\"FDRV\":46,\"TRNS\":45,\"ENGN\":43,\"XFMR\":36,\"FAN\":31,\"FEED\":27,\"BATT\":26,\"HVAC\":26,\"SCRN\":20,\"COMP\":14,\"PCS\":12,\"LUBE\":9,\"CRSH\":8,\"HPU\":8,\"BESS\":6,\"FIRE\":6,\"STKR\":4}},{\"name\":\"PARENT_EQ\",\"filled\":848,\"distinct\":346,\"shapes\":{\"A+-9999\":848},\"samples\":[\"CV-1001\",\"CV-1023\",\"CV-1046\",\"HT-1007\",\"PP-1026\",\"BS-1004\"]},{\"name\":\"LOC_CD\",\"filled\":1274,\"distinct\":64,\"shapes\":{\"A+-A+-99\":1258,\"A+_A+_99\":5,\"A+ A+ 99\":5,\"A+-99\":3},\"samples\":[\"GR-CONV-04\",\"PH-STKY-01\",\"PH-STKY-02\",\"GR-TSHOP-01\",\"GR-DWTR-03\",\"GR-PLNT-01\"]},{\"name\":\"CRIT\",\"filled\":1282,\"distinct\":3,\"shapes\":{\"A\":1282},\"samples\":[\"B\",\"B\",\"B\",\"B\",\"B\",\"C\"],\"values\":{\"B\":568,\"C\":520,\"A\":194}},{\"name\":\"MFR\",\"filled\":1282,\"distinct\":26,\"shapes\":{\"A+ A+\":953,\"A+ A+ A+\":288,\"A+\":41},\"samples\":[\"Northline Conveyors\",\"Northline Conveyors\",\"Northline Conveyors\",\"Tundra Haul\",\"Meridian Electric\",\"Kessel Mineral Equipment\"],\"values\":{\"Torquemax Motors\":168,\"Northline Conveyors\":162,\"Meridian Electric\":155,\"Basalt Heavy Machines\":137,\"Lakeshore Drives\":132,\"Flexrun Belting\":67,\"Gearline Industrial\":47,\"Riverbend Pump Works\":43,\"Slurrytec\":41,\"Bravura Bulk Systems\":38,\"Aquaforce Pumps\":38,\"Cyclone Air Movement\":31,\"Coolbox Climate\":26,\"Tundra Haul\":24,\"Voltreserve Energy\":24,\"Halden Transformers\":24,\"Diesel Dynamics\":22,\"Shakewell Screens\":20,\"Kessel Mineral Equipment\":18,\"Polar Air Systems\":15,\"Gridstack Storage\":14,\"Lubripro Systems\":9,\"Hydrapower Units\":8,\"Ironjaw Crushing\":7,\"Safeguard Fire Systems\":6,\"Invertix Power\":6}},{\"name\":\"MODEL_NO\",\"filled\":1282,\"distinct\":1252,\"shapes\":{\"A+-9999\":1282},\"samples\":[\"OI-1043\",\"SM-2459\",\"GK-9576\",\"EW-0243\",\"PI-1577\",\"TX-6481\"]},{\"name\":\"SERIAL_NO\",\"filled\":1282,\"distinct\":1252,\"shapes\":{\"A+99999999\":1282},\"samples\":[\"SN18196001\",\"SN75265479\",\"SN28685289\",\"SN73839597\",\"SN71121663\",\"SN98077046\"]},{\"name\":\"INSTALL_DT\",\"filled\":1282,\"distinct\":815,\"shapes\":{\"99/99/9999\":1192,\"99999\":50,\"9999-99-99\":40},\"samples\":[\"22/02/2014\",\"30/01/2020\",\"13/06/2021\",\"09/08/2010\",\"31/10/2009\",\"27/04/2013\"]},{\"name\":\"METER_TYPE\",\"filled\":1282,\"distinct\":5,\"shapes\":{\"A+\":894,\"A/A\":388},\"samples\":[\"HRS\",\"N/A\",\"N/A\",\"KM\",\"HRS\",\"HRS\"],\"values\":{\"HRS\":814,\"N/A\":388,\"KM\":48,\"CYC\":26,\"MWH\":6}},{\"name\":\"EQ_STATUS\",\"filled\":1282,\"distinct\":2,\"shapes\":{\"A\":1282},\"samples\":[\"A\",\"A\",\"A\",\"A\",\"A\",\"A\"],\"values\":{\"A\":1246,\"I\":36}}]},{\"sheet\":\"PM_SCHED\",\"rows\":1598,\"columns\":[{\"name\":\"PM_NO\",\"filled\":1598,\"distinct\":1598,\"shapes\":{\"A+-99999\":1598},\"samples\":[\"PM-00001\",\"PM-00267\",\"PM-00533\",\"PM-00799\",\"PM-01065\",\"PM-01331\"]},{\"name\":\"EQUIP_NO\",\"filled\":1592,\"distinct\":1097,\"shapes\":{\"A+-9999-A+9\":1007,\"A+-9999\":585},\"samples\":[\"CV-1001\",\"CV-1034-GBX2\",\"CR-1007\",\"HT-1042-ENG1\",\"PP-1101\",\"FD-1022\"]},{\"name\":\"PM_DESC\",\"filled\":1590,\"distinct\":38,\"shapes\":{\"A+ A+ A+\":731,\"A+ A+ A+ A+\":494,\"A+ A+\":179,\"A+ A+ 999A\":85},\"samples\":[\"Belt and idler inspection\",\"Belt and idler inspection\",\"Hydraulic oil sample\",\"Final drive oil change\",\"Pump inspection\",\"Feeder pan and chain inspection\"],\"values\":{\"Motor vibration and thermography\":293,\"Motor bearing regrease\":204,\"Pump inspection\":104,\"Gearbox oil sample\":89,\"Gearbox oil change\":67,\"Pulley lagging inspection\":63,\"Belt and idler inspection\":58,\"Belt thickness survey\":53,\"Pump overhaul\":48,\"Weekly chassis inspection\":43,\"Engine service 500h\":43,\"Engine service 250h\":42,\"Transmission oil sample\":42,\"Final drive oil change\":40,\"Pull-wire and guarding test\":39,\"Tyre inspection and rotation\":32,\"Transformer visual inspection\":31,\"Transformer oil DGA sample\":30,\"Engine service 1000h\":29,\"Fan vibration check\":25,\"Battery module SOH review\":23,\"HVAC filter change\":23,\"Feeder pan and chain inspection\":21,\"Screen deck inspection\":19,\"Container thermal scan\":16,\"Compressor service\":14,\"Air receiver inspection\":14,\"HVAC service\":13,\"Inverter filter clean and IR scan\":12,\"Liner wear measurement\":8,\"Crusher major service\":8,\"Lube filter change\":8,\"Hydraulic oil sample\":8,\"BESS monthly site inspection\":6,\"BESS annual capacity test\":6,\"BESS throughput health check\":6,\"Fire suppression inspection\":6,\"Slew bearing inspection\":4}},{\"name\":\"PM_TYPE\",\"filled\":1598,\"distinct\":2,\"shapes\":{\"A\":1598},\"samples\":[\"T\",\"T\",\"M\",\"M\",\"M\",\"T\"],\"values\":{\"T\":1090,\"M\":508}},{\"name\":\"PM_FREQ\",\"filled\":1598,\"distinct\":64,\"shapes\":{\"99\":591,\"9999\":305,\"999\":302,\"9\":100},\"samples\":[\"7\",\"90\",\"2000\",\"250\",\"8000\",\"14\"]},{\"name\":\"FREQ_UOM\",\"filled\":1598,\"distinct\":6,\"shapes\":{\"A\":1537,\"A+\":61},\"samples\":[\"D\",\"D\",\"H\",\"H\",\"H\",\"D\"],\"values\":{\"D\":1069,\"H\":445,\"KM\":32,\"W\":23,\"CYC\":23,\"MWH\":6}},{\"name\":\"CRAFT\",\"filled\":1598,\"distinct\":4,\"shapes\":{\"A+\":1598},\"samples\":[\"MECH\",\"MECH\",\"MECH\",\"MECH\",\"MECH\",\"MECH\"],\"values\":{\"MECH\":1115,\"ELEC\":402,\"HV\":61,\"INST\":20}},{\"name\":\"EST_HRS\",\"filled\":1598,\"distinct\":11,\"shapes\":{\"9\":936,\"9.9\":571,\"99\":91},\"samples\":[\"2\",\"0.5\",\"24\",\"4\",\"16\",\"2\"],\"values\":{\"1\":426,\"1.5\":313,\"0.5\":258,\"2\":166,\"4\":164,\"3\":127,\"16\":54,\"8\":43,\"12\":29,\"6\":10,\"24\":8}},{\"name\":\"LAST_DONE_DT\",\"filled\":906,\"distinct\":629,\"shapes\":{\"99/99/9999\":826,\"9999-99-99\":40,\"99999\":40},\"samples\":[\"29/09/2026\",\"26/01/2026\",\"09/27/2025\",\"05/01/2025\",\"10/08/2025\",\"26/01/2026\"]}]},{\"sheet\":\"WORK_ORDERS\",\"rows\":5015,\"columns\":[{\"name\":\"WO_NUM\",\"filled\":5015,\"distinct\":5000,\"shapes\":{\"A+-999999\":5015},\"samples\":[\"WO-100001\",\"WO-100834\",\"WO-101666\",\"WO-102497\",\"WO-103330\",\"WO-104162\"]},{\"name\":\"EQUIP_NO\",\"filled\":5005,\"distinct\":1143,\"shapes\":{\"A+-9999-A+9\":2508,\"A+-9999\":2497},\"samples\":[\"HT-1019\",\"HT-1013-TRN1\",\"PP-1048\",\"PP-1022\",\"CV-1042\",\"MT-5030\"]},{\"name\":\"PM_NO\",\"filled\":2759,\"distinct\":917,\"shapes\":{\"A+-99999\":2759},\"samples\":[\"PM-00659\",\"PM-00387\",\"PM-00256\",\"PM-01440\",\"PM-01287\",\"PM-00197\"]},{\"name\":\"WO_TYPE\",\"filled\":5005,\"distinct\":3,\"shapes\":{\"A+\":5005},\"samples\":[\"PM\",\"PM\",\"PM\",\"PM\",\"PM\",\"EM\"],\"values\":{\"PM\":2755,\"CM\":1901,\"EM\":349}},{\"name\":\"WO_STATUS\",\"filled\":5015,\"distinct\":4,\"shapes\":{\"A+\":5015},\"samples\":[\"COMP\",\"COMP\",\"COMP\",\"COMP\",\"COMP\",\"COMP\"],\"values\":{\"COMP\":4810,\"CAN\":161,\"WAPPR\":27,\"INPRG\":17}},{\"name\":\"PRIORITY\",\"filled\":5015,\"distinct\":4,\"shapes\":{\"9\":5015},\"samples\":[\"3\",\"3\",\"3\",\"3\",\"3\",\"3\"],\"values\":{\"3\":3656,\"2\":571,\"4\":436,\"1\":352}},{\"name\":\"WO_DESC\",\"filled\":5015,\"distinct\":110,\"shapes\":{\"A+ A+ A+\":2254,\"A+ A+ A+ A+\":1548,\"A+ A+\":461,\"A+ A+ 999A\":284},\"samples\":[\"Weekly chassis inspection\",\"Pump bearing failure\",\"Pump inspection\",\"Engine service 250h\",\"Gearbox oil leak at output seal\",\"Buchholz alarm\"]},{\"name\":\"OPEN_DT\",\"filled\":5000,\"distinct\":1296,\"shapes\":{\"99/99/9999\":4780,\"99999\":120,\"9999-99-99\":100},\"samples\":[\"01/01/2024\",\"21/06/2024\",\"02/12/2024\",\"25/05/2025\",\"04/11/2025\",\"23/04/2026\"]},{\"name\":\"SCHED_DT\",\"filled\":5015,\"distinct\":1292,\"shapes\":{\"99/99/9999\":4795,\"99999\":120,\"9999-99-99\":100},\"samples\":[\"01/01/2024\",\"29/06/2024\",\"02/12/2024\",\"24/05/2025\",\"06/11/2025\",\"02/05/2026\"]},{\"name\":\"COMP_DT\",\"filled\":4810,\"distinct\":1294,\"shapes\":{\"99/99/9999\":4590,\"99999\":120,\"9999-99-99\":100},\"samples\":[\"10/01/2024\",\"27/06/2024\",\"08/12/2024\",\"03/06/2025\",\"31/10/2025\",\"26/04/2026\"]},{\"name\":\"LABOR_HRS\",\"filled\":5015,\"distinct\":70,\"shapes\":{\"9\":2434,\"9.9\":2286,\"99\":150,\"99.9\":118},\"samples\":[\"2\",\"1.5\",\"1\",\"2.5\",\"3\",\"1.5\"]}]}]"
+  }
+ ],
+ "response_format": {
+  "type": "json_schema",
+  "json_schema": {
+   "name": "mapping_proposal",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "date_format",
+     "date_format_confidence",
+     "date_format_reason",
+     "sheets"
+    ],
+    "properties": {
+     "date_format": {
+      "type": "string",
+      "enum": [
+       "%d/%m/%Y",
+       "%m/%d/%Y",
+       "%Y-%m-%d"
+      ]
+     },
+     "date_format_confidence": {
+      "type": "number"
+     },
+     "date_format_reason": {
+      "type": "string"
+     },
+     "sheets": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "sheet",
+        "table",
+        "confidence",
+        "reason",
+        "columns",
+        "codes"
+       ],
+       "properties": {
+        "sheet": {
+         "type": "string"
+        },
+        "table": {
+         "type": "string",
+         "enum": [
+          "sites",
+          "locations",
+          "assets",
+          "pm_schedules",
+          "work_orders",
+          "none"
+         ]
+        },
+        "confidence": {
+         "type": "number"
+        },
+        "reason": {
+         "type": "string"
+        },
+        "columns": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+           "source",
+           "target",
+           "confidence",
+           "reason"
+          ],
+          "properties": {
+           "source": {
+            "type": "string"
+           },
+           "target": {
+            "type": "string",
+            "enum": [
+             "asset_class",
+             "asset_id",
+             "completed_date",
+             "craft",
+             "criticality",
+             "description",
+             "est_labor_hours",
+             "frequency_unit",
+             "frequency_value",
+             "install_date",
+             "labor_hours",
+             "last_done_date",
+             "location_id",
+             "location_type",
+             "manufacturer",
+             "meter_type",
+             "model",
+             "name",
+             "parent_asset_id",
+             "parent_location_id",
+             "pm_id",
+             "priority",
+             "reported_date",
+             "scheduled_date",
+             "serial_number",
+             "site_id",
+             "site_name",
+             "status",
+             "timezone",
+             "trigger_type",
+             "wo_id",
+             "wo_type",
+             "none"
+            ]
+           },
+           "confidence": {
+            "type": "number"
+           },
+           "reason": {
+            "type": "string"
+           }
+          }
+         }
+        },
+        "codes": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+           "source_column",
+           "code",
+           "value",
+           "relation",
+           "confidence",
+           "reason"
+          ],
+          "properties": {
+           "source_column": {
+            "type": "string"
+           },
+           "code": {
+            "type": "string"
+           },
+           "value": {
+            "type": "string"
+           },
+           "relation": {
+            "type": "string",
+            "enum": [
+             "same_meaning",
+             "needs_conversion",
+             "uncertain"
+            ]
+           },
+           "confidence": {
+            "type": "number"
+           },
+           "reason": {
+            "type": "string"
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   },
+   "strict": true
+  }
+ },
+ "content": "{\"date_format\":\"%d\\/%m\\/%Y\",\"date_format_confidence\":0.91,\"date_format_reason\":\"Most slash dates are day-first (22\\/02\\/2014, 31\\/10\\/2009, 27\\/06\\/2024); 09\\/27\\/2025 and a few ISO or serial values are minorities.\",\"sheets\":[{\"sheet\":\"LOCATIONS\",\"table\":\"locations\",\"confidence\":0.98,\"reason\":\"Location codes, parent codes, site codes and SITE\\/AREA\\/SYS levels match the locations hierarchy.\",\"columns\":[{\"source\":\"LOC_CD\",\"target\":\"location_id\",\"confidence\":0.98,\"reason\":\"Unique codes such as GR-CRSH-02 match location_id shape and examples.\"},{\"source\":\"LOC_DESC\",\"target\":\"name\",\"confidence\":0.96,\"reason\":\"Free-text place names are the human-readable location name.\"},{\"source\":\"PARENT_LOC\",\"target\":\"parent_location_id\",\"confidence\":0.97,\"reason\":\"Parent values are location codes; the two blanks match the two SITE rows.\"},{\"source\":\"SITE_CD\",\"target\":\"site_id\",\"confidence\":0.98,\"reason\":\"GR and PH are the site codes each location belongs to.\"},{\"source\":\"LOC_TYPE\",\"target\":\"location_type\",\"confidence\":0.97,\"reason\":\"SITE, AREA and SYS are the hierarchy levels.\"}],\"codes\":[{\"source_column\":\"LOC_TYPE\",\"code\":\"SITE\",\"value\":\"SITE\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"SITE denotes the SITE hierarchy level exactly.\"},{\"source_column\":\"LOC_TYPE\",\"code\":\"AREA\",\"value\":\"AREA\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"AREA denotes the AREA hierarchy level exactly.\"},{\"source_column\":\"LOC_TYPE\",\"code\":\"SYS\",\"value\":\"SYSTEM\",\"relation\":\"same_meaning\",\"confidence\":0.96,\"reason\":\"SYS is the abbreviation of SYSTEM beside SITE and AREA.\"}]},{\"sheet\":\"EQUIPMENT\",\"table\":\"assets\",\"confidence\":0.98,\"reason\":\"Equipment tags, class, parent, location, manufacturer and install fields match assets.\",\"columns\":[{\"source\":\"EQUIP_NO\",\"target\":\"asset_id\",\"confidence\":0.98,\"reason\":\"Tags such as CV-1001 are the asset identifiers.\"},{\"source\":\"EQUIP_DESC\",\"target\":\"description\",\"confidence\":0.97,\"reason\":\"Free-text equipment names are the asset description.\"},{\"source\":\"EQ_CLASS\",\"target\":\"asset_class\",\"confidence\":0.98,\"reason\":\"Coded classes such as CONV, PUMP and HTRK are equipment classes.\"},{\"source\":\"PARENT_EQ\",\"target\":\"parent_asset_id\",\"confidence\":0.97,\"reason\":\"Parent values are asset tags of the installed parent.\"},{\"source\":\"LOC_CD\",\"target\":\"location_id\",\"confidence\":0.96,\"reason\":\"Values such as GR-CONV-04 are the install location codes.\"},{\"source\":\"CRIT\",\"target\":\"criticality\",\"confidence\":0.96,\"reason\":\"A\\/B\\/C rank letters are the criticality scale.\"},{\"source\":\"MFR\",\"target\":\"manufacturer\",\"confidence\":0.98,\"reason\":\"Company names are the manufacturer.\"},{\"source\":\"MODEL_NO\",\"target\":\"model\",\"confidence\":0.98,\"reason\":\"MODEL_NO values are model numbers.\"},{\"source\":\"SERIAL_NO\",\"target\":\"serial_number\",\"confidence\":0.98,\"reason\":\"SERIAL_NO values are serial numbers.\"},{\"source\":\"INSTALL_DT\",\"target\":\"install_date\",\"confidence\":0.97,\"reason\":\"Install dates are when the asset was installed.\"},{\"source\":\"METER_TYPE\",\"target\":\"meter_type\",\"confidence\":0.97,\"reason\":\"HRS, KM, CYC, MWH and N\\/A describe what the meter counts.\"},{\"source\":\"EQ_STATUS\",\"target\":\"status\",\"confidence\":0.96,\"reason\":\"A and I are active versus inactive status codes.\"}],\"codes\":[{\"source_column\":\"EQ_CLASS\",\"code\":\"MOTR\",\"value\":\"MOTOR\",\"relation\":\"same_meaning\",\"confidence\":0.96,\"reason\":\"MOTR is a clear abbreviation of MOTOR.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"PULY\",\"value\":\"PULLEY\",\"relation\":\"same_meaning\",\"confidence\":0.95,\"reason\":\"PULY is a truncation of PULLEY, confirmed by pulley descriptions.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"PUMP\",\"value\":\"PUMP\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"PUMP matches the PUMP class exactly.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"GBOX\",\"value\":\"GEARBOX\",\"relation\":\"same_meaning\",\"confidence\":0.96,\"reason\":\"GBOX is a clear abbreviation of GEARBOX.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"BELT\",\"value\":\"BELT\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"BELT matches the BELT class exactly.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"CONV\",\"value\":\"CONVEYOR\",\"relation\":\"same_meaning\",\"confidence\":0.98,\"reason\":\"CONV is the standard abbreviation of CONVEYOR.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"HTRK\",\"value\":\"HAUL_TRUCK\",\"relation\":\"same_meaning\",\"confidence\":0.97,\"reason\":\"HTRK abbreviates haul truck; its count matches KM-metered assets.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"FDRV\",\"value\":\"FINAL_DRIVE\",\"relation\":\"same_meaning\",\"confidence\":0.96,\"reason\":\"FDRV abbreviates FINAL_DRIVE; child tags use FD-.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"TRNS\",\"value\":\"TRANSMISSION\",\"relation\":\"same_meaning\",\"confidence\":0.96,\"reason\":\"TRNS abbreviates TRANSMISSION; child tags use TRN.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"ENGN\",\"value\":\"ENGINE\",\"relation\":\"same_meaning\",\"confidence\":0.97,\"reason\":\"ENGN is a clear abbreviation of ENGINE.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"XFMR\",\"value\":\"TRANSFORMER\",\"relation\":\"same_meaning\",\"confidence\":0.97,\"reason\":\"XFMR is the standard abbreviation of TRANSFORMER.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"FAN\",\"value\":\"FAN\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"FAN matches the FAN class exactly.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"FEED\",\"value\":\"FEEDER\",\"relation\":\"same_meaning\",\"confidence\":0.93,\"reason\":\"FEED abbreviates FEEDER in this equipment-class list.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"BATT\",\"value\":\"BATTERY_CONTAINER\",\"relation\":\"uncertain\",\"confidence\":0.46,\"reason\":\"BATT is battery equipment, but cycle-metered modules may not be BATTERY_CONTAINER; BESS is separate.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"HVAC\",\"value\":\"HVAC\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"HVAC matches the HVAC class exactly.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"SCRN\",\"value\":\"SCREEN\",\"relation\":\"same_meaning\",\"confidence\":0.96,\"reason\":\"SCRN is a clear abbreviation of SCREEN.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"COMP\",\"value\":\"COMPRESSOR\",\"relation\":\"same_meaning\",\"confidence\":0.95,\"reason\":\"COMP abbreviates COMPRESSOR; count matches compressor-service PMs.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"PCS\",\"value\":\"PCS\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"PCS matches the PCS class exactly.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"LUBE\",\"value\":\"LUBE_SYSTEM\",\"relation\":\"same_meaning\",\"confidence\":0.9,\"reason\":\"LUBE denotes the lube-system class; manufacturer count matches.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"CRSH\",\"value\":\"CRUSHER\",\"relation\":\"same_meaning\",\"confidence\":0.97,\"reason\":\"CRSH is a clear abbreviation of CRUSHER.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"HPU\",\"value\":\"HPU\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"HPU matches the HPU class exactly.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"BESS\",\"value\":\"BESS\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"BESS matches the BESS class exactly.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"FIRE\",\"value\":\"FIRE_SUPPRESSION\",\"relation\":\"same_meaning\",\"confidence\":0.93,\"reason\":\"FIRE matches fire-suppression assets; inspection PM count equals the class count.\"},{\"source_column\":\"EQ_CLASS\",\"code\":\"STKR\",\"value\":\"STACKER_RECLAIMER\",\"relation\":\"uncertain\",\"confidence\":0.55,\"reason\":\"STKR means stacker, which is not necessarily a STACKER_RECLAIMER.\"},{\"source_column\":\"CRIT\",\"code\":\"A\",\"value\":\"1\",\"relation\":\"same_meaning\",\"confidence\":0.98,\"reason\":\"Rank letter A is the highest criticality, coded 1 in the target.\"},{\"source_column\":\"CRIT\",\"code\":\"B\",\"value\":\"2\",\"relation\":\"same_meaning\",\"confidence\":0.98,\"reason\":\"Rank letter B is the middle criticality, coded 2 in the target.\"},{\"source_column\":\"CRIT\",\"code\":\"C\",\"value\":\"3\",\"relation\":\"same_meaning\",\"confidence\":0.98,\"reason\":\"Rank letter C is the lowest criticality, coded 3 in the target.\"},{\"source_column\":\"METER_TYPE\",\"code\":\"HRS\",\"value\":\"HOURS\",\"relation\":\"same_meaning\",\"confidence\":0.97,\"reason\":\"HRS is the standard abbreviation of HOURS.\"},{\"source_column\":\"METER_TYPE\",\"code\":\"N\\/A\",\"value\":\"NONE\",\"relation\":\"same_meaning\",\"confidence\":0.86,\"reason\":\"N\\/A is an explicit no-meter code, matching NONE rather than a blank.\"},{\"source_column\":\"METER_TYPE\",\"code\":\"KM\",\"value\":\"KM\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"KM matches the KM meter type exactly.\"},{\"source_column\":\"METER_TYPE\",\"code\":\"CYC\",\"value\":\"CYCLES\",\"relation\":\"same_meaning\",\"confidence\":0.96,\"reason\":\"CYC is a clear abbreviation of CYCLES.\"},{\"source_column\":\"METER_TYPE\",\"code\":\"MWH\",\"value\":\"MWH\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"MWH matches the MWH meter type exactly.\"},{\"source_column\":\"EQ_STATUS\",\"code\":\"A\",\"value\":\"ACTIVE\",\"relation\":\"same_meaning\",\"confidence\":0.96,\"reason\":\"A is the active status code in this column.\"},{\"source_column\":\"EQ_STATUS\",\"code\":\"I\",\"value\":\"INACTIVE\",\"relation\":\"same_meaning\",\"confidence\":0.96,\"reason\":\"I is the inactive status code paired with A.\"}]},{\"sheet\":\"PM_SCHED\",\"table\":\"pm_schedules\",\"confidence\":0.98,\"reason\":\"PM numbers, asset tags, trigger, frequency, craft and last-done dates match pm_schedules.\",\"columns\":[{\"source\":\"PM_NO\",\"target\":\"pm_id\",\"confidence\":0.98,\"reason\":\"PM-00001 style numbers are unique PM schedule IDs.\"},{\"source\":\"EQUIP_NO\",\"target\":\"asset_id\",\"confidence\":0.97,\"reason\":\"Equipment tags identify the asset the PM applies to.\"},{\"source\":\"PM_DESC\",\"target\":\"description\",\"confidence\":0.97,\"reason\":\"Task text is the PM description.\"},{\"source\":\"PM_TYPE\",\"target\":\"trigger_type\",\"confidence\":0.95,\"reason\":\"T and M distinguish calendar versus meter triggers.\"},{\"source\":\"PM_FREQ\",\"target\":\"frequency_value\",\"confidence\":0.96,\"reason\":\"Numeric intervals are the frequency value; the unit is a separate column.\"},{\"source\":\"FREQ_UOM\",\"target\":\"frequency_unit\",\"confidence\":0.96,\"reason\":\"D, H, KM, W, CYC and MWH are the interval units.\"},{\"source\":\"CRAFT\",\"target\":\"craft\",\"confidence\":0.98,\"reason\":\"MECH, ELEC, HV and INST are the trade codes.\"},{\"source\":\"EST_HRS\",\"target\":\"est_labor_hours\",\"confidence\":0.97,\"reason\":\"Values such as 0.5 and 1.5 are estimated labor hours, not minutes.\"},{\"source\":\"LAST_DONE_DT\",\"target\":\"last_done_date\",\"confidence\":0.97,\"reason\":\"Dates record when the PM was last completed.\"}],\"codes\":[{\"source_column\":\"PM_TYPE\",\"code\":\"T\",\"value\":\"TIME\",\"relation\":\"same_meaning\",\"confidence\":0.95,\"reason\":\"T denotes a calendar\\/time trigger, paired with M for meter.\"},{\"source_column\":\"PM_TYPE\",\"code\":\"M\",\"value\":\"METER\",\"relation\":\"same_meaning\",\"confidence\":0.95,\"reason\":\"M denotes a meter\\/usage trigger, paired with T for time.\"},{\"source_column\":\"FREQ_UOM\",\"code\":\"D\",\"value\":\"DAYS\",\"relation\":\"same_meaning\",\"confidence\":0.97,\"reason\":\"D is the standard abbreviation of DAYS.\"},{\"source_column\":\"FREQ_UOM\",\"code\":\"H\",\"value\":\"HOURS\",\"relation\":\"same_meaning\",\"confidence\":0.97,\"reason\":\"H is the standard abbreviation of HOURS.\"},{\"source_column\":\"FREQ_UOM\",\"code\":\"KM\",\"value\":\"KM\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"KM matches the KM frequency unit exactly.\"},{\"source_column\":\"FREQ_UOM\",\"code\":\"W\",\"value\":\"DAYS\",\"relation\":\"needs_conversion\",\"confidence\":0.93,\"reason\":\"W means weeks and must be multiplied by 7 to become DAYS.\"},{\"source_column\":\"FREQ_UOM\",\"code\":\"CYC\",\"value\":\"CYCLES\",\"relation\":\"same_meaning\",\"confidence\":0.96,\"reason\":\"CYC is a clear abbreviation of CYCLES.\"},{\"source_column\":\"FREQ_UOM\",\"code\":\"MWH\",\"value\":\"MWH\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"MWH matches the MWH frequency unit exactly.\"},{\"source_column\":\"CRAFT\",\"code\":\"MECH\",\"value\":\"MECH\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"MECH matches the MECH craft exactly.\"},{\"source_column\":\"CRAFT\",\"code\":\"ELEC\",\"value\":\"ELEC\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"ELEC matches the ELEC craft exactly.\"},{\"source_column\":\"CRAFT\",\"code\":\"HV\",\"value\":\"HV\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"HV matches the HV craft exactly.\"},{\"source_column\":\"CRAFT\",\"code\":\"INST\",\"value\":\"INST\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"INST matches the INST craft exactly.\"}]},{\"sheet\":\"WORK_ORDERS\",\"table\":\"work_orders\",\"confidence\":0.98,\"reason\":\"Work-order numbers, type, status, priority, dates and labor hours match work_orders.\",\"columns\":[{\"source\":\"WO_NUM\",\"target\":\"wo_id\",\"confidence\":0.98,\"reason\":\"WO-100001 style numbers are unique work order IDs.\"},{\"source\":\"EQUIP_NO\",\"target\":\"asset_id\",\"confidence\":0.97,\"reason\":\"Equipment tags identify the asset the work was done on.\"},{\"source\":\"PM_NO\",\"target\":\"pm_id\",\"confidence\":0.96,\"reason\":\"PM numbers link PM-generated work orders and are blank otherwise.\"},{\"source\":\"WO_TYPE\",\"target\":\"wo_type\",\"confidence\":0.98,\"reason\":\"PM, CM and EM match the work-order type codes.\"},{\"source\":\"WO_STATUS\",\"target\":\"status\",\"confidence\":0.94,\"reason\":\"COMP, CAN, INPRG and WAPPR are work-order status codes.\"},{\"source\":\"PRIORITY\",\"target\":\"priority\",\"confidence\":0.97,\"reason\":\"Values 1-4 already use the target priority scale, with 1 least common.\"},{\"source\":\"WO_DESC\",\"target\":\"description\",\"confidence\":0.97,\"reason\":\"Work text is the work-order description.\"},{\"source\":\"OPEN_DT\",\"target\":\"reported_date\",\"confidence\":0.94,\"reason\":\"Open date is when the work order was raised; schedule and completion are separate.\"},{\"source\":\"SCHED_DT\",\"target\":\"scheduled_date\",\"confidence\":0.97,\"reason\":\"Schedule date is when the work was scheduled.\"},{\"source\":\"COMP_DT\",\"target\":\"completed_date\",\"confidence\":0.98,\"reason\":\"Completion date is populated exactly for the 4810 COMP rows.\"},{\"source\":\"LABOR_HRS\",\"target\":\"labor_hours\",\"confidence\":0.97,\"reason\":\"Hour quantities are actual labor hours booked.\"}],\"codes\":[{\"source_column\":\"WO_TYPE\",\"code\":\"PM\",\"value\":\"PM\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"PM matches preventive work orders exactly.\"},{\"source_column\":\"WO_TYPE\",\"code\":\"CM\",\"value\":\"CM\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"CM matches corrective work orders exactly.\"},{\"source_column\":\"WO_TYPE\",\"code\":\"EM\",\"value\":\"EM\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"EM matches emergency work orders exactly.\"},{\"source_column\":\"WO_STATUS\",\"code\":\"COMP\",\"value\":\"COMPLETED\",\"relation\":\"same_meaning\",\"confidence\":0.97,\"reason\":\"COMP is the standard abbreviation of COMPLETED.\"},{\"source_column\":\"WO_STATUS\",\"code\":\"CAN\",\"value\":\"CANCELLED\",\"relation\":\"same_meaning\",\"confidence\":0.94,\"reason\":\"CAN is the cancelled-status abbreviation in this column.\"},{\"source_column\":\"WO_STATUS\",\"code\":\"WAPPR\",\"value\":\"OPEN\",\"relation\":\"uncertain\",\"confidence\":0.42,\"reason\":\"WAPPR means waiting on approval, which is not exactly OPEN.\"},{\"source_column\":\"WO_STATUS\",\"code\":\"INPRG\",\"value\":\"IN_PROGRESS\",\"relation\":\"same_meaning\",\"confidence\":0.96,\"reason\":\"INPRG is the standard abbreviation of IN_PROGRESS.\"},{\"source_column\":\"PRIORITY\",\"code\":\"1\",\"value\":\"1\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"Priority 1 already matches the target scale.\"},{\"source_column\":\"PRIORITY\",\"code\":\"2\",\"value\":\"2\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"Priority 2 already matches the target scale.\"},{\"source_column\":\"PRIORITY\",\"code\":\"3\",\"value\":\"3\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"Priority 3 already matches the target scale.\"},{\"source_column\":\"PRIORITY\",\"code\":\"4\",\"value\":\"4\",\"relation\":\"same_meaning\",\"confidence\":0.99,\"reason\":\"Priority 4 already matches the target scale.\"}]}]}"
+}

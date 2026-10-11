@@ -1,0 +1,115 @@
+{
+ "task": "review-labor",
+ "key": "9ed191582416caf3",
+ "model": "grok-4.7",
+ "recorded_at": "2026-10-11T19:19:25+00:00",
+ "latency_s": 170.195,
+ "reasoning_effort": "medium",
+ "usage": {
+  "prompt_tokens": 5649,
+  "cached_tokens": 1152,
+  "completion_tokens": 1777,
+  "reasoning_tokens": 16043,
+  "cost_usd": 0.11649,
+  "cost_exact": true
+ },
+ "messages": [
+  {
+   "role": "system",
+   "content": "You review data-quality questions from a maintenance-system (CMMS) data migration.\nEach item is one question with a fixed set of options and the context the rules\ncollected. Pick the option the evidence supports, or \"unsure\".\nDomain facts you can rely on:\n- Work order numbers are assigned when a work order is raised, so reported dates rise with\n  the work order number; neighbouring work orders were raised within days of each other.\n- A work order is scheduled and completed on or after the day it was reported, usually\n  within a few weeks.\n- A PM's last-done date is normally the completion date of its latest work order.\n- Component assets are installed together with, or after, their parent asset.\n- Every date shown as context is one that cannot itself be a day/month misreading.\n- Labor is booked in hours; a value that equals plausible hours x 60 was probably typed\n  in minutes.\n- Two asset rows that differ only in how the tag is written (case, separators) and have the\n  same serial number, model and location are the same physical asset.\nBe conservative: a wrong answer silently corrupts data, an \"unsure\" just sends the item to\na person. Give a confidence between 0 and 1 and a one-line reason."
+  },
+  {
+   "role": "user",
+   "content": "QUESTIONS (labor, options: hours, minutes or unsure)\n[{\"id\":\"L188\",\"options\":{\"hours\":\"90\",\"minutes\":\"1.5\"},\"context\":{\"record\":\"work order WO-100006\",\"question\":\"labor '90': hours as booked, or minutes (= 1.5 h)?\",\"type\":\"PM\",\"description\":\"Motor vibration and thermography\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":1.5,\"median_hours_same_description\":1.5,\"n_same_description\":185}},{\"id\":\"L189\",\"options\":{\"hours\":\"330\",\"minutes\":\"5.5\"},\"context\":{\"record\":\"work order WO-100119\",\"question\":\"labor '330': hours as booked, or minutes (= 5.5 h)?\",\"type\":\"EM\",\"description\":\"Pulley bearing noise\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":4.0,\"n_same_description\":118}},{\"id\":\"L190\",\"options\":{\"hours\":\"420\",\"minutes\":\"7\"},\"context\":{\"record\":\"work order WO-100157\",\"question\":\"labor '420': hours as booked, or minutes (= 7 h)?\",\"type\":\"CM\",\"description\":\"Motor running hot\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.75,\"n_same_description\":116}},{\"id\":\"L191\",\"options\":{\"hours\":\"60\",\"minutes\":\"1\"},\"context\":{\"record\":\"work order WO-100258\",\"question\":\"labor '60': hours as booked, or minutes (= 1 h)?\",\"type\":\"CM\",\"description\":\"Terminal box water ingress\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.5,\"n_same_description\":130}},{\"id\":\"L192\",\"options\":{\"hours\":\"60\",\"minutes\":\"1\"},\"context\":{\"record\":\"work order WO-100528\",\"question\":\"labor '60': hours as booked, or minutes (= 1 h)?\",\"type\":\"PM\",\"description\":\"Pull-wire and guarding test\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":1.0,\"median_hours_same_description\":1.0,\"n_same_description\":69}},{\"id\":\"L193\",\"options\":{\"hours\":\"90\",\"minutes\":\"1.5\"},\"context\":{\"record\":\"work order WO-100588\",\"question\":\"labor '90': hours as booked, or minutes (= 1.5 h)?\",\"type\":\"PM\",\"description\":\"Weekly chassis inspection\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":2.0,\"median_hours_same_description\":2.0,\"n_same_description\":328}},{\"id\":\"L194\",\"options\":{\"hours\":\"120\",\"minutes\":\"2\"},\"context\":{\"record\":\"work order WO-100773\",\"question\":\"labor '120': hours as booked, or minutes (= 2 h)?\",\"type\":\"PM\",\"description\":\"Belt and idler inspection\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":2.0,\"median_hours_same_description\":2.0,\"n_same_description\":449}},{\"id\":\"L195\",\"options\":{\"hours\":\"1440\",\"minutes\":\"24\"},\"context\":{\"record\":\"work order WO-100872\",\"question\":\"labor '1440': hours as booked, or minutes (= 24 h)?\",\"type\":\"EM\",\"description\":\"Pump cavitation\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.75,\"n_same_description\":28}},{\"id\":\"L196\",\"options\":{\"hours\":\"30\",\"minutes\":\"0.5\"},\"context\":{\"record\":\"work order WO-100884\",\"question\":\"labor '30': hours as booked, or minutes (= 0.5 h)?\",\"type\":\"PM\",\"description\":\"Pump inspection\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":1.0,\"median_hours_same_description\":1.0,\"n_same_description\":197}},{\"id\":\"L197\",\"options\":{\"hours\":\"180\",\"minutes\":\"3\"},\"context\":{\"record\":\"work order WO-101043\",\"question\":\"labor '180': hours as booked, or minutes (= 3 h)?\",\"type\":\"CM\",\"description\":\"Fire panel fault\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.0,\"n_same_description\":7}},{\"id\":\"L198\",\"options\":{\"hours\":\"120\",\"minutes\":\"2\"},\"context\":{\"record\":\"work order WO-101209\",\"question\":\"labor '120': hours as booked, or minutes (= 2 h)?\",\"type\":\"PM\",\"description\":\"Weekly chassis inspection\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":2.0,\"median_hours_same_description\":2.0,\"n_same_description\":328}},{\"id\":\"L199\",\"options\":{\"hours\":\"120\",\"minutes\":\"2\"},\"context\":{\"record\":\"work order WO-101463\",\"question\":\"labor '120': hours as booked, or minutes (= 2 h)?\",\"type\":\"PM\",\"description\":\"Weekly chassis inspection\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":2.0,\"median_hours_same_description\":2.0,\"n_same_description\":328}},{\"id\":\"L200\",\"options\":{\"hours\":\"120\",\"minutes\":\"2\"},\"context\":{\"record\":\"work order WO-101479\",\"question\":\"labor '120': hours as booked, or minutes (= 2 h)?\",\"type\":\"PM\",\"description\":\"Belt and idler inspection\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":2.0,\"median_hours_same_description\":2.0,\"n_same_description\":449}},{\"id\":\"L201\",\"options\":{\"hours\":\"690\",\"minutes\":\"11.5\"},\"context\":{\"record\":\"work order WO-101585\",\"question\":\"labor '690': hours as booked, or minutes (= 11.5 h)?\",\"type\":\"CM\",\"description\":\"Terminal box water ingress\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.5,\"n_same_description\":130}},{\"id\":\"L202\",\"options\":{\"hours\":\"720\",\"minutes\":\"12\"},\"context\":{\"record\":\"work order WO-101595\",\"question\":\"labor '720': hours as booked, or minutes (= 12 h)?\",\"type\":\"PM\",\"description\":\"Engine service 1000h\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":12.0,\"median_hours_same_description\":10.5,\"n_same_description\":31}},{\"id\":\"L203\",\"options\":{\"hours\":\"390\",\"minutes\":\"6.5\"},\"context\":{\"record\":\"work order WO-101617\",\"question\":\"labor '390': hours as booked, or minutes (= 6.5 h)?\",\"type\":\"CM\",\"description\":\"Pulley lagging worn\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.5,\"n_same_description\":113}},{\"id\":\"L204\",\"options\":{\"hours\":\"30\",\"minutes\":\"0.5\"},\"context\":{\"record\":\"work order WO-101767\",\"question\":\"labor '30': hours as booked, or minutes (= 0.5 h)?\",\"type\":\"PM\",\"description\":\"Gearbox oil sample\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":0.5,\"median_hours_same_description\":0.5,\"n_same_description\":54}},{\"id\":\"L205\",\"options\":{\"hours\":\"120\",\"minutes\":\"2\"},\"context\":{\"record\":\"work order WO-101840\",\"question\":\"labor '120': hours as booked, or minutes (= 2 h)?\",\"type\":\"PM\",\"description\":\"Belt and idler inspection\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":2.0,\"median_hours_same_description\":2.0,\"n_same_description\":449}},{\"id\":\"L206\",\"options\":{\"hours\":\"360\",\"minutes\":\"6\"},\"context\":{\"record\":\"work order WO-102096\",\"question\":\"labor '360': hours as booked, or minutes (= 6 h)?\",\"type\":\"CM\",\"description\":\"Motor running hot\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.75,\"n_same_description\":116}},{\"id\":\"L207\",\"options\":{\"hours\":\"240\",\"minutes\":\"4\"},\"context\":{\"record\":\"work order WO-102113\",\"question\":\"labor '240': hours as booked, or minutes (= 4 h)?\",\"type\":\"CM\",\"description\":\"Terminal box water ingress\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.5,\"n_same_description\":130}},{\"id\":\"L208\",\"options\":{\"hours\":\"330\",\"minutes\":\"5.5\"},\"context\":{\"record\":\"work order WO-102293\",\"question\":\"labor '330': hours as booked, or minutes (= 5.5 h)?\",\"type\":\"CM\",\"description\":\"Belt rip repair\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.75,\"n_same_description\":42}},{\"id\":\"L209\",\"options\":{\"hours\":\"120\",\"minutes\":\"2\"},\"context\":{\"record\":\"work order WO-102481\",\"question\":\"labor '120': hours as booked, or minutes (= 2 h)?\",\"type\":\"PM\",\"description\":\"Weekly chassis inspection\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":2.0,\"median_hours_same_description\":2.0,\"n_same_description\":328}},{\"id\":\"L210\",\"options\":{\"hours\":\"150\",\"minutes\":\"2.5\"},\"context\":{\"record\":\"work order WO-102509\",\"question\":\"labor '150': hours as booked, or minutes (= 2.5 h)?\",\"type\":\"PM\",\"description\":\"Weekly chassis inspection\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":2.0,\"median_hours_same_description\":2.0,\"n_same_description\":328}},{\"id\":\"L211\",\"options\":{\"hours\":\"570\",\"minutes\":\"9.5\"},\"context\":{\"record\":\"work order WO-102566\",\"question\":\"labor '570': hours as booked, or minutes (= 9.5 h)?\",\"type\":\"EM\",\"description\":\"Pump bearing failure\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.25,\"n_same_description\":40}},{\"id\":\"L212\",\"options\":{\"hours\":\"630\",\"minutes\":\"10.5\"},\"context\":{\"record\":\"work order WO-102736\",\"question\":\"labor '630': hours as booked, or minutes (= 10.5 h)?\",\"type\":\"PM\",\"description\":\"Engine service 1000h\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":12.0,\"median_hours_same_description\":10.5,\"n_same_description\":31}},{\"id\":\"L213\",\"options\":{\"hours\":\"90\",\"minutes\":\"1.5\"},\"context\":{\"record\":\"work order WO-102852\",\"question\":\"labor '90': hours as booked, or minutes (= 1.5 h)?\",\"type\":\"PM\",\"description\":\"Weekly chassis inspection\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":2.0,\"median_hours_same_description\":2.0,\"n_same_description\":328}},{\"id\":\"L214\",\"options\":{\"hours\":\"420\",\"minutes\":\"7\"},\"context\":{\"record\":\"work order WO-103235\",\"question\":\"labor '420': hours as booked, or minutes (= 7 h)?\",\"type\":\"PM\",\"description\":\"Engine service 500h\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":8.0,\"median_hours_same_description\":8.5,\"n_same_description\":69}},{\"id\":\"L215\",\"options\":{\"hours\":\"150\",\"minutes\":\"2.5\"},\"context\":{\"record\":\"work order WO-103346\",\"question\":\"labor '150': hours as booked, or minutes (= 2.5 h)?\",\"type\":\"CM\",\"description\":\"Motor winding fault\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.5,\"n_same_description\":96}},{\"id\":\"L216\",\"options\":{\"hours\":\"60\",\"minutes\":\"1\"},\"context\":{\"record\":\"work order WO-103395\",\"question\":\"labor '60': hours as booked, or minutes (= 1 h)?\",\"type\":\"CM\",\"description\":\"Feeder pan damage\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":4.0,\"n_same_description\":17}},{\"id\":\"L217\",\"options\":{\"hours\":\"90\",\"minutes\":\"1.5\"},\"context\":{\"record\":\"work order WO-103397\",\"question\":\"labor '90': hours as booked, or minutes (= 1.5 h)?\",\"type\":\"PM\",\"description\":\"Motor bearing regrease\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":1.0,\"median_hours_same_description\":1.0,\"n_same_description\":91}},{\"id\":\"L218\",\"options\":{\"hours\":\"180\",\"minutes\":\"3\"},\"context\":{\"record\":\"work order WO-103400\",\"question\":\"labor '180': hours as booked, or minutes (= 3 h)?\",\"type\":\"PM\",\"description\":\"Belt and idler inspection\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":2.0,\"median_hours_same_description\":2.0,\"n_same_description\":449}},{\"id\":\"L219\",\"options\":{\"hours\":\"540\",\"minutes\":\"9\"},\"context\":{\"record\":\"work order WO-103614\",\"question\":\"labor '540': hours as booked, or minutes (= 9 h)?\",\"type\":\"CM\",\"description\":\"Edge damage on belt\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.5,\"n_same_description\":35}},{\"id\":\"L220\",\"options\":{\"hours\":\"150\",\"minutes\":\"2.5\"},\"context\":{\"record\":\"work order WO-103798\",\"question\":\"labor '150': hours as booked, or minutes (= 2.5 h)?\",\"type\":\"CM\",\"description\":\"Pulley lagging worn\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.5,\"n_same_description\":113}},{\"id\":\"L221\",\"options\":{\"hours\":\"900\",\"minutes\":\"15\"},\"context\":{\"record\":\"work order WO-103921\",\"question\":\"labor '900': hours as booked, or minutes (= 15 h)?\",\"type\":\"CM\",\"description\":\"Motor tripping on overload\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":4.0,\"n_same_description\":99}},{\"id\":\"L222\",\"options\":{\"hours\":\"120\",\"minutes\":\"2\"},\"context\":{\"record\":\"work order WO-103942\",\"question\":\"labor '120': hours as booked, or minutes (= 2 h)?\",\"type\":\"EM\",\"description\":\"Motor winding fault\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":null,\"median_hours_same_description\":3.5,\"n_same_description\":96}},{\"id\":\"L223\",\"options\":{\"hours\":\"60\",\"minutes\":\"1\"},\"context\":{\"record\":\"work order WO-104110\",\"question\":\"labor '60': hours as booked, or minutes (= 1 h)?\",\"type\":\"PM\",\"description\":\"Pull-wire and guarding test\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":1.0,\"median_hours_same_description\":1.0,\"n_same_description\":69}},{\"id\":\"L224\",\"options\":{\"hours\":\"90\",\"minutes\":\"1.5\"},\"context\":{\"record\":\"work order WO-104842\",\"question\":\"labor '90': hours as booked, or minutes (= 1.5 h)?\",\"type\":\"PM\",\"description\":\"Pump inspection\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":1.0,\"median_hours_same_description\":1.0,\"n_same_description\":197}},{\"id\":\"L225\",\"options\":{\"hours\":\"510\",\"minutes\":\"8.5\"},\"context\":{\"record\":\"work order WO-104912\",\"question\":\"labor '510': hours as booked, or minutes (= 8.5 h)?\",\"type\":\"PM\",\"description\":\"Engine service 500h\",\"status\":\"COMPLETED\",\"pm_estimated_hours\":8.0,\"median_hours_same_description\":8.5,\"n_same_description\":69}}]"
+  }
+ ],
+ "response_format": {
+  "type": "json_schema",
+  "json_schema": {
+   "name": "review_decisions",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "decisions"
+    ],
+    "properties": {
+     "decisions": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "id",
+        "decision",
+        "confidence",
+        "reason"
+       ],
+       "properties": {
+        "id": {
+         "type": "string",
+         "enum": [
+          "L188",
+          "L189",
+          "L190",
+          "L191",
+          "L192",
+          "L193",
+          "L194",
+          "L195",
+          "L196",
+          "L197",
+          "L198",
+          "L199",
+          "L200",
+          "L201",
+          "L202",
+          "L203",
+          "L204",
+          "L205",
+          "L206",
+          "L207",
+          "L208",
+          "L209",
+          "L210",
+          "L211",
+          "L212",
+          "L213",
+          "L214",
+          "L215",
+          "L216",
+          "L217",
+          "L218",
+          "L219",
+          "L220",
+          "L221",
+          "L222",
+          "L223",
+          "L224",
+          "L225"
+         ]
+        },
+        "decision": {
+         "type": "string",
+         "enum": [
+          "hours",
+          "minutes",
+          "unsure"
+         ]
+        },
+        "confidence": {
+         "type": "number"
+        },
+        "reason": {
+         "type": "string"
+        }
+       }
+      }
+     }
+    }
+   },
+   "strict": true
+  }
+ },
+ "content": "{\"decisions\":[{\"id\":\"L188\",\"decision\":\"minutes\",\"confidence\":0.96,\"reason\":\"90h is impossible for this PM; 1.5h matches the estimate and the median (n=185).\"},{\"id\":\"L189\",\"decision\":\"minutes\",\"confidence\":0.82,\"reason\":\"330h is not credible; 5.5h is close to the 4.0h median for this EM (n=118).\"},{\"id\":\"L190\",\"decision\":\"minutes\",\"confidence\":0.74,\"reason\":\"420h cannot be a motor-hot CM booking; 7h is within 2× the 3.75h median.\"},{\"id\":\"L191\",\"decision\":\"unsure\",\"confidence\":0.62,\"reason\":\"1h is well below the 3.5h median and 60h is a possible multi-day repair, so the unit is ambiguous.\"},{\"id\":\"L192\",\"decision\":\"minutes\",\"confidence\":0.96,\"reason\":\"60h is absurd for this PM; 1h matches the estimate and the median.\"},{\"id\":\"L193\",\"decision\":\"minutes\",\"confidence\":0.86,\"reason\":\"90h cannot be a weekly chassis PM; 1.5h is close to the 2.0h estimate and median.\"},{\"id\":\"L194\",\"decision\":\"minutes\",\"confidence\":0.96,\"reason\":\"120h is impossible here; 2h matches the PM estimate and median (n=449).\"},{\"id\":\"L195\",\"decision\":\"unsure\",\"confidence\":0.64,\"reason\":\"24h is several times the 3.75h median, so 1440 is not a clean minutes match despite 1440h being implausible.\"},{\"id\":\"L196\",\"decision\":\"minutes\",\"confidence\":0.8,\"reason\":\"30h is 30× the 1.0h PM estimate; 0.5h is a plausible short inspection.\"},{\"id\":\"L197\",\"decision\":\"minutes\",\"confidence\":0.84,\"reason\":\"180h is not credible; 3h matches the median for this fault exactly.\"},{\"id\":\"L198\",\"decision\":\"minutes\",\"confidence\":0.96,\"reason\":\"120h cannot be this weekly PM; 2h matches the estimate and median.\"},{\"id\":\"L199\",\"decision\":\"minutes\",\"confidence\":0.96,\"reason\":\"120h cannot be this weekly PM; 2h matches the estimate and median.\"},{\"id\":\"L200\",\"decision\":\"minutes\",\"confidence\":0.96,\"reason\":\"120h is impossible for this PM; 2h matches the estimate and median (n=449).\"},{\"id\":\"L201\",\"decision\":\"unsure\",\"confidence\":0.6,\"reason\":\"11.5h is over 3× the 3.5h median, so minutes is not a clear fit even though 690h is implausible.\"},{\"id\":\"L202\",\"decision\":\"minutes\",\"confidence\":0.96,\"reason\":\"720h is impossible; 12h matches the PM estimate and is near the 10.5h median.\"},{\"id\":\"L203\",\"decision\":\"minutes\",\"confidence\":0.74,\"reason\":\"390h is not a credible booking; 6.5h is within 2× the 3.5h median.\"},{\"id\":\"L204\",\"decision\":\"minutes\",\"confidence\":0.96,\"reason\":\"30h is absurd for an oil sample; 0.5h matches the estimate and median.\"},{\"id\":\"L205\",\"decision\":\"minutes\",\"confidence\":0.96,\"reason\":\"120h is impossible for this PM; 2h matches the estimate and median.\"},{\"id\":\"L206\",\"decision\":\"minutes\",\"confidence\":0.76,\"reason\":\"360h cannot be this CM; 6h is within 2× the 3.75h median.\"},{\"id\":\"L207\",\"decision\":\"minutes\",\"confidence\":0.88,\"reason\":\"240h is not credible; 4h is close to the 3.5h median (n=130).\"},{\"id\":\"L208\",\"decision\":\"minutes\",\"confidence\":0.78,\"reason\":\"330h is implausible; 5.5h is within 50% of the 3.75h median.\"},{\"id\":\"L209\",\"decision\":\"minutes\",\"confidence\":0.96,\"reason\":\"120h cannot be this weekly PM; 2h matches the estimate and median.\"},{\"id\":\"L210\",\"decision\":\"minutes\",\"confidence\":0.88,\"reason\":\"150h is impossible for a weekly chassis PM; 2.5h is close to the 2.0h estimate.\"},{\"id\":\"L211\",\"decision\":\"unsure\",\"confidence\":0.6,\"reason\":\"9.5h is nearly 3× the 3.25h median, so a long EM in hours cannot be ruled out cleanly.\"},{\"id\":\"L212\",\"decision\":\"minutes\",\"confidence\":0.94,\"reason\":\"630h is impossible; 10.5h matches the median and is near the 12h estimate.\"},{\"id\":\"L213\",\"decision\":\"minutes\",\"confidence\":0.86,\"reason\":\"90h cannot be this weekly PM; 1.5h is close to the 2.0h estimate and median.\"},{\"id\":\"L214\",\"decision\":\"minutes\",\"confidence\":0.88,\"reason\":\"420h is not a 500h service; 7h is close to the 8h estimate and 8.5h median.\"},{\"id\":\"L215\",\"decision\":\"minutes\",\"confidence\":0.8,\"reason\":\"150h is not credible versus the 3.5h median; 2.5h is within normal variation.\"},{\"id\":\"L216\",\"decision\":\"unsure\",\"confidence\":0.62,\"reason\":\"1h is far below the 4h median and 60h could be a real multi-day repair (n=17).\"},{\"id\":\"L217\",\"decision\":\"minutes\",\"confidence\":0.8,\"reason\":\"90h is absurd for a regrease PM; 1.5h is near the 1.0h estimate and median.\"},{\"id\":\"L218\",\"decision\":\"minutes\",\"confidence\":0.8,\"reason\":\"180h cannot be this PM; 3h is close to the 2.0h estimate and median.\"},{\"id\":\"L219\",\"decision\":\"unsure\",\"confidence\":0.58,\"reason\":\"9h is more than 2× the 3.5h median, so minutes is not a tight enough match to auto-correct 540.\"},{\"id\":\"L220\",\"decision\":\"minutes\",\"confidence\":0.8,\"reason\":\"150h is not credible versus the 3.5h median; 2.5h is within normal variation.\"},{\"id\":\"L221\",\"decision\":\"unsure\",\"confidence\":0.6,\"reason\":\"15h is nearly 4× the 4.0h median, so this is not a clear minutes-for-typical-hours case.\"},{\"id\":\"L222\",\"decision\":\"minutes\",\"confidence\":0.72,\"reason\":\"120h is ~34× the 3.5h median (n=96); 2h is the same order of magnitude as peers.\"},{\"id\":\"L223\",\"decision\":\"minutes\",\"confidence\":0.96,\"reason\":\"60h is absurd for this PM; 1h matches the estimate and median.\"},{\"id\":\"L224\",\"decision\":\"minutes\",\"confidence\":0.8,\"reason\":\"90h is far above a 1h pump inspection; 1.5h is near the estimate and median.\"},{\"id\":\"L225\",\"decision\":\"minutes\",\"confidence\":0.95,\"reason\":\"510h is impossible for this service; 8.5h matches the median and is next to the 8h estimate.\"}]}"
+}
