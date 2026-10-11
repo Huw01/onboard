@@ -16,8 +16,8 @@ Inputs
     runs. It uses --llm-mode replay, i.e. the recorded grok-4.7 responses committed in
     tests/fixtures/llm/, so it takes seconds and needs no API key.
 
-Outputs: docs/media/demo.mp4 (1920x1080 H.264, no audio) and docs/media/demo.gif
-(960x540, highlights only).
+Outputs: out/media/demo.mp4 (1920x1080 H.264, no audio; published as an asset of the
+GitHub release, not committed) and docs/media/demo.gif (960x540, highlights only).
 """
 
 from __future__ import annotations
@@ -273,6 +273,19 @@ def eval_numbers() -> dict:
     n["cost"], = grab(r"\*\*\$([\d.]+)\*\*", float)
     n["wall_min"], = grab(r"≈ \*\*(\d+) min\*\*", int)
     n["model"], = grab(r"recorded run \(`([^`]+)`")
+    # the headline block: one consistent set of numbers
+    n["auto"], n["auto_pct"] = grab(r"\*\*auto-fixed\*\*[^|]*\| ([\d,]+) \| \*\*([\d.]+)%", str)
+    n["held"], n["held_pct"] = grab(r"\*\*routed to a person\*\*[^|]*\| ([\d,]+) \| "
+                                    r"\*\*([\d.]+)%", str)
+    n["silent"], n["silent_pct"] = grab(r"\*\*undetected\*\*[^|]*\| ([\d,]+) \| "
+                                        r"\*\*([\d.]+)%", str)
+    for k in ("auto", "held", "silent"):
+        n[k] = int(n[k])
+    if n["auto"] + n["held"] + n["silent"] != n["injected"]:
+        raise SystemExit("docs/eval.md headline does not add up")
+    n["codes_wrong"], = grab(r"\*\*(\d+)\*\* wrong code translations", int)
+    n["fp"], n["fp_codes"] = grab(r"(\d+) clean rows are also held .*?\(([A-Z]+ \d+(?:, [A-Z]+ \d+)*)\)")
+    n["fp_codes"] = ", ".join(n["fp_codes"].split()[::2])     # "BATT 14 STKR 4" -> codes
     return n
 
 
@@ -701,7 +714,8 @@ class OptionB:
             "(structured output, a confidence and reason for each)",
             "Validator checks every row with deterministic rules",
             "LLM resolves ambiguous dates and duplicates; answers are re-validated",
-            f"Scored against the answer key: {det:,} of {tot:,} corruptions caught",
+            f"Answer key: {det:,} of {tot:,} caught (= auto-fixed + routed to review), "
+            f"{tot - det} missed",
         ]
         # each caption starts with its stage, but stays up for at least MIN_CUE seconds
         # (the replayed mapping finishes in the same instant validation starts)
@@ -852,14 +866,16 @@ class Results:
     def __init__(self, nums: dict, detected: int, corruptions: int):
         n = nums
         self.tiles = [
-            (f"{detected:,} / {corruptions:,}", f"injected corruptions caught "
-             f"({detected / corruptions:.1%})", GREEN),
-            (f"{n['rows_ok']:,} / {n['rows']:,}", "rows load identical to ground truth", GREEN),
+            (f"{n['auto_pct']}%", f"auto-fixed ({n['auto']:,} of {n['injected']:,})", GREEN),
+            (f"{n['held_pct']}%", f"routed to a person ({n['held']:,})", AMBER),
+            (f"{n['silent_pct']}%", f"undetected ({n['silent']}), loaded wrong", RED),
             (f"{n['broken']}", "correct cells changed by the LLM", GREEN),
-            (f"{n['cols_ok']} / {n['cols']}", "columns mapped correctly by the LLM", BLUE),
-            (f"${n['cost']:.2f}", f"per full run ({n['model']}, provider-reported)", BLUE),
-            (f"≈ {n['wall_min']} min", "per live run; replay in CI takes seconds", BLUE),
+            (f"{n['cols_ok']} / {n['cols']}", f"columns mapped · {n['codes_wrong']} wrong codes",
+             BLUE),
+            (f"${n['cost']:.2f}", f"per full run ({n['model']}) · ≈ {n['wall_min']} min live",
+             BLUE),
         ]
+        self.fp = (n["fp"], n["fp_codes"])
         self.silent = (n["silent_before"], n["silent_after"])
 
     def __call__(self, t):
@@ -881,11 +897,16 @@ class Results:
             d.rounded_rectangle((x, y, x + tw, y + th), radius=18, fill=rgba(PANEL, a))
             d.rounded_rectangle((x, y, x + 8, y + th), radius=4, fill=rgba(col, a))
             text(d, (x + tw / 2 + 4, y + 88), big, font(68, "Bold"), INK, a, "mm")
-            text(d, (x + tw / 2 + 4, y + 158), small, font(25, "Medium"), MUTED, a, "mm")
+            fs = 26
+            while tsize(font(fs, "Medium"), small)[0] > tw - 40 and fs > 16:
+                fs -= 1
+            text(d, (x + tw / 2 + 4, y + 158), small, font(fs, "Medium"), MUTED, a, "mm")
         a = ease((t - 3.0) / 0.5)
-        text(d, (W / 2, 800), f"Cells still loaded with a wrong value: {self.silent[1]} "
-             f"(rules only: {self.silent[0]}), almost all day/month dates the data cannot settle",
-             font(28, "Medium"), INK, a, "mm")
+        text(d, (W / 2, 782), "Undetected: almost all day/month dates that are valid either "
+             "way round", font(27, "Medium"), INK, a, "mm")
+        text(d, (W / 2, 824), f"Also held: {self.fp[0]} clean rows, all using "
+             f"{self.fp[1]}, the codes the mapper left for a person", font(27, "Medium"),
+             INK, a, "mm")
         a = ease((t - 4.0) / 0.6)
         d.rounded_rectangle((W / 2 - 420, 880, W / 2 + 420, 980), radius=50,
                             fill=rgba(BLUE, a))
@@ -974,6 +995,8 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--raw", type=Path, default=RAW_DEFAULT, help="computer-use recording")
     ap.add_argument("--crf", type=int, default=25)
+    ap.add_argument("--mp4", type=Path, default=ROOT / "out" / "media" / "demo.mp4",
+                    help="where to write the MP4 (it ships as a release asset, not in git)")
     ap.add_argument("--no-gif", action="store_true")
     ap.add_argument("--frames", type=float, nargs="*", default=None,
                     help="only write PNG stills at these times (seconds) to docs/media/")
@@ -1002,7 +1025,8 @@ def main() -> None:
                 print(p)
             return
         n = int(tl.duration * FPS)
-        mp4 = MEDIA / "demo.mp4"
+        mp4 = args.mp4
+        mp4.parent.mkdir(parents=True, exist_ok=True)
         encode_mp4(lambda k: tl.frame(k / FPS), n, mp4, args.crf)
         print(f"{mp4} {mp4.stat().st_size / 1e6:.2f} MB, {n / FPS:.1f}s")
         if not args.no_gif:

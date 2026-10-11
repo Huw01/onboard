@@ -29,3 +29,6 @@ out/
 
 # Demo build: stills from `make_demo_video.py --frames`
 docs/media/frame_*.png
+
+# The demo MP4 ships as a release asset (v0.1.0), not in git
+docs/media/*.mp4
