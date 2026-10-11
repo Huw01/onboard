@@ -25,6 +25,27 @@ def generate(
 
 
 @app.command()
+def corrupt(
+    clean: Path = typer.Option(Path("data/clean"), help="Clean CSVs to start from."),
+    legacy: Path = typer.Option(Path("data/legacy"), help="Where to write the legacy export."),
+    truth: Path = typer.Option(Path("data/ground_truth"), help="Where to write the answer key."),
+    seed: int = typer.Option(42, help="Random seed."),
+) -> None:
+    """Corrupt the clean dataset into a legacy export plus a ground-truth answer key."""
+    from onboard.corrupt import corrupt as run
+
+    c = run(clean, legacy, truth, seed)
+    for name, s in c.sheets.items():
+        typer.echo(f"{name:<12} {len(s.df):>6} rows")
+    counts = c.corruptions().corruption_type.value_counts().sort_index()
+    typer.echo("corruptions:")
+    for kind, n in counts.items():
+        typer.echo(f"  {kind:<22} {n:>5}")
+    typer.echo(f"  {'TOTAL':<22} {counts.sum():>5}")
+    typer.echo(f"wrote {legacy / 'legacy_export.xlsx'} and {truth}/corruptions.csv")
+
+
+@app.command()
 def version() -> None:
     """Print the package version."""
     from onboard import __version__
