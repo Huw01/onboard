@@ -42,4 +42,14 @@ def evaluate(rr: RunResult) -> dict:
                                "accepted": sum(d["kind"] == k for d in accepted)}
                            for k in ("date", "labor", "dup")},
         "usage": rr.usage,
+        "wall_s": wall_time(rr.calls),
     }
+
+
+def wall_time(calls: list[dict]) -> float:
+    """Wall-clock estimate of a live run from the recorded per-call latencies: the
+    mapping call runs first, then every review batch runs in parallel, so the review
+    pass takes as long as its slowest batch. Local compute (seconds) is ignored."""
+    lat = lambda pred: [float(c["latency_s"]) for c in calls if pred(c["task"])]  # noqa: E731
+    return round(sum(lat(lambda t: t == "map")) + max(lat(lambda t: t.startswith("review")),
+                                                       default=0.0), 1)

@@ -92,7 +92,7 @@ def run(
 
     llm = LLM(model=model, mode=llm_mode, usage_path=out / "usage.csv")
     rr = run_pipeline(export, llm, date.fromisoformat(as_of) if as_of else None,
-                      mapping, review)
+                      mapping, review, progress=_print_progress)
     write_run(rr, out)
     typer.echo(rr.after.summary_text())
     acc = sum(d["accepted"] for d in rr.decisions)
@@ -108,6 +108,40 @@ def run(
 
         for k, v in score(rr.after, truth).as_dict().items():
             typer.echo(f"{k:<20} {v}")
+
+
+_KIND = {"date": "dates", "labor": "labor", "dup": "duplicates"}
+
+
+def _print_progress(stage: str, **info) -> None:
+    """One or two lines per pipeline stage, so a long run shows where it is."""
+    from collections import Counter
+
+    echo = lambda m: typer.echo(m, err=True)  # noqa: E731
+    if stage == "map":
+        who = f"asking {info['model']}" if info["model"] else "using the given mapping"
+        echo(f"> map: {info['sheets']} sheets, {info['rows']:,} rows, {who}")
+    elif stage == "mapped":
+        d = Counter((x["kind"], x["decision"]) for x in info["report"].get("decisions", []))
+        if d:
+            echo(f"  {d['sheet', 'accepted']} sheets, {d['column', 'accepted']} columns, "
+                 f"{d['code', 'accepted']} code translations applied, "
+                 f"{d['code', 'review']} left for a person")
+    elif stage == "validate":
+        echo("> validate: deterministic rules on every row")
+    elif stage == "validated":
+        s = info["result"].summary()
+        echo(f"  {sum(s['cells_fixed'].values()):,} cells fixed by rule, "
+             f"{sum(s['review_items'].values()):,} items need a decision")
+    elif stage == "review":
+        k = Counter(c.kind for c in info["candidates"])
+        echo(f"> review: {sum(k.values())} closed questions to the LLM ("
+             + ", ".join(f"{n} {_KIND.get(t, t)}" for t, n in k.most_common()) + ")")
+    elif stage == "reviewed":
+        acc = sum(x["accepted"] for x in info["decisions"])
+        s = info["result"].summary()
+        echo(f"  {acc} answers accepted (confidence >= 0.85), re-validated: "
+             f"{sum(s['review_items'].values()):,} items still need a decision")
 
 
 @app.command()

@@ -75,8 +75,10 @@ def section(e: dict) -> str:
         f"**Cost per full run**: {u['calls']} calls, {u['prompt_tokens']:,} input tokens "
         f"({u['cached_tokens']:,} cached), {u['completion_tokens']:,} output + "
         f"{u['reasoning_tokens']:,} reasoning tokens, **${u['cost_usd']:.2f}** "
-        f"(provider-reported), {u['latency_s']:.0f} s of model time "
-        f"(review batches run in parallel).",
+        f"(provider-reported). Wall time of a live run ≈ **{e['wall_s'] / 60:.0f} min** "
+        f"(mapping call, then the slowest of the parallel review batches; "
+        f"{u['latency_s']:.0f} s of model time in total). "
+        f"Replaying the recorded responses takes seconds and needs no key.",
     ]
     return "\n".join(out)
 

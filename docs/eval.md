@@ -60,4 +60,4 @@ Rules + LLM review pass (243 questions: 187 dates, 38 labor, 18 duplicates; 173 
 | false positives (clean rows held: all from codes left for a person) | 39 | 39 |
 | rows loaded identical to ground truth | 6,884 / 7,893 | 6,976 / 7,893 |
 
-**Cost per full run**: 8 calls, 60,413 input tokens (9,216 cached), 15,889 output + 95,062 reasoning tokens, **$0.77** (provider-reported), 1517 s of model time (review batches run in parallel).
+**Cost per full run**: 8 calls, 60,413 input tokens (9,216 cached), 15,889 output + 95,062 reasoning tokens, **$0.77** (provider-reported). Wall time of a live run ≈ **11 min** (mapping call, then the slowest of the parallel review batches; 1517 s of model time in total). Replaying the recorded responses takes seconds and needs no key.
