@@ -29,7 +29,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from onboard.schema import FLOAT_COLUMNS, INT_COLUMNS, LOAD_ORDER, REQUIRED, TABLES
+from onboard.schema import (CODED_FIELDS, FLOAT_COLUMNS, INT_COLUMNS, LOAD_ORDER, REQUIRED,
+                            TABLES)
 
 EXCEL_EPOCH = date(1899, 12, 30)
 SERIAL_RANGE = (20000, 60000)          # 1954-10 .. 2064-04
@@ -201,8 +202,38 @@ class Result:
 # Validator
 # --------------------------------------------------------------------------
 
+@dataclass
+class Override:
+    """An external resolution (e.g. from the LLM review pass) for one legacy cell.
+
+    It is applied to the raw legacy value *before* validation, so the result is
+    still parsed and checked by every rule like any other value."""
+    sheet: str
+    row_index: int
+    field: str            # legacy column
+    value: str            # new raw value
+    reason: str
+    confidence: float
+    source: str = "llm"
+
+
+@dataclass
+class DropRow:
+    """An external decision that a row duplicates another and should not be loaded."""
+    sheet: str
+    row_index: int
+    duplicate_of: int     # row_index of the row that is kept
+    reason: str
+    confidence: float
+    source: str = "llm"
+
+
 class Validator:
-    def __init__(self, mapping: dict, as_of: date | None = None):
+    def __init__(self, mapping: dict, as_of: date | None = None,
+                 overrides: list[Override] | None = None, drops: list[DropRow] | None = None):
+        self.overrides = overrides or []
+        self.drops = drops or []
+        self.overridden: set[tuple[str, int, str]] = set()
         self.mapping = mapping
         self.fmt = mapping.get("source_date_format", "%d/%m/%Y")
         self.as_of = (as_of or date.today()).isoformat()
@@ -215,6 +246,9 @@ class Validator:
     # ---- bookkeeping -----------------------------------------------------
     def _note(self, table: str, i: int | None, col: str, check: str, action: str,
               original="", value="", message="") -> None:
+        if action == "fixed" and (table, i, col) in self.overridden \
+                and check != "external_resolution":
+            return  # the override already explains this cell
         df = self.t[table]
         rec = "" if i is None else str(df.at[i, TABLES[table][0]])
         self.findings.append(Finding(
@@ -249,10 +283,12 @@ class Validator:
             self.status[table] = ["ok"] * len(df)
             rows_in[table] = len(df)
 
+        self.apply_external()
         tables = [t for t in LOAD_ORDER if t in self.t]
         for table in tables:
             self.strip_whitespace(table)
             self.drop_exact_duplicates(table)
+            self.apply_drops(table)
             self.decode_values(table, self.mapping["sheets"][self.sheet_of[table]]["value_maps"])
             self.parse_dates(table)
         if "pm_schedules" in self.t:
@@ -262,12 +298,45 @@ class Validator:
         if "work_orders" in self.t:
             self.infer_work_order_fields()
         for table in tables:
+            self.check_domains(table)
+            self.check_numbers(table)
+        for table in tables:
             self.required_fields(table)
             self.duplicate_keys(table)
         self.references()
         self.consistency()
         self.cascade_holds()
         return Result(self.output_tables(), self.findings, rows_in, self.status, self.t)
+
+    # ---- external resolutions ---------------------------------------------
+    def _table_of(self, sheet: str) -> str | None:
+        return next((t for t, sh in self.sheet_of.items() if sh == sheet), None)
+
+    def apply_external(self) -> None:
+        for o in self.overrides:
+            table = self._table_of(o.sheet)
+            col = next((tc for tc, lc in self.legacy_col.get(table, {}).items()
+                        if lc == o.field), None)
+            if table is None or col is None or not 0 <= o.row_index < len(self.t[table]):
+                continue
+            df = self.t[table]
+            old = df.at[o.row_index, col]
+            df.at[o.row_index, col] = o.value
+            self.overridden.add((table, o.row_index, col))
+            self._note(table, o.row_index, col, "external_resolution", "fixed", old, o.value,
+                       f"[{o.source}, confidence {o.confidence:.2f}] {o.reason}")
+
+    def apply_drops(self, table: str) -> None:
+        for d in self.drops:
+            if self._table_of(d.sheet) != table or not 0 <= d.row_index < len(self.t[table]):
+                continue
+            if self.status[table][d.row_index] == "dropped":
+                continue
+            pk = TABLES[table][0]
+            self._note(table, d.row_index, pk, "external_duplicate", "dropped",
+                       self.t[table].at[d.row_index, pk], "",
+                       f"[{d.source}, confidence {d.confidence:.2f}] duplicate of excel_row "
+                       f"{d.duplicate_of + 2}: {d.reason}")
 
     # ---- per-table checks ------------------------------------------------
     def strip_whitespace(self, table: str) -> None:
@@ -309,6 +378,44 @@ class Validator:
                     df.at[i, col] = None
                     self._note(table, i, col, "unknown_code", "review", raw, "",
                                f"'{raw}' is not a known code for {col}")
+
+    def check_domains(self, table: str) -> None:
+        """Coded fields must hold an allowed target value after decoding."""
+        df = self.t[table]
+        for (t, col), allowed in CODED_FIELDS.items():
+            if t != table or col not in df:
+                continue
+            as_text = {str(a): a for a in allowed}
+            for i in self._rows(table):
+                v = df.at[i, col]
+                if v in (None, ""):
+                    continue
+                if str(v) in as_text:
+                    df.at[i, col] = as_text[str(v)]
+                elif not self._has_review(table, i, col):
+                    df.at[i, col] = None
+                    self._note(table, i, col, "unknown_code", "review", v, "",
+                               f"'{v}' is not an allowed value for {col}")
+
+    def check_numbers(self, table: str) -> None:
+        df = self.t[table]
+        for col in df.columns:
+            if col not in INT_COLUMNS | FLOAT_COLUMNS or col in ("frequency_value",
+                                                                  "labor_hours"):
+                continue  # those two have their own parsers
+            for i in self._rows(table):
+                v = df.at[i, col]
+                if v in (None, ""):
+                    continue
+                try:
+                    num = float(v)
+                    if col in INT_COLUMNS and num != int(num):
+                        raise ValueError
+                    df.at[i, col] = int(num) if col in INT_COLUMNS else num
+                except (TypeError, ValueError):
+                    df.at[i, col] = None
+                    self._note(table, i, col, "not_a_number", "review", v, "",
+                               f"'{v}' is not a valid number for {col}")
 
     def parse_dates(self, table: str) -> None:
         df = self.t[table]
@@ -641,9 +748,10 @@ class Validator:
         return out
 
 
-def validate(legacy: dict[str, pd.DataFrame], mapping: dict,
-             as_of: date | None = None) -> Result:
-    return Validator(mapping, as_of).run(legacy)
+def validate(legacy: dict[str, pd.DataFrame], mapping: dict, as_of: date | None = None,
+             overrides: list[Override] | None = None,
+             drops: list[DropRow] | None = None) -> Result:
+    return Validator(mapping, as_of, overrides, drops).run(legacy)
 
 
 def write_result(result: Result, out_dir: Path) -> None:
