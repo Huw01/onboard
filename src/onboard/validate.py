@@ -234,6 +234,7 @@ class Validator:
         self.overrides = overrides or []
         self.drops = drops or []
         self.overridden: set[tuple[str, int, str]] = set()
+        self._reviewed: set[tuple[str, int | None, str]] = set()
         self.mapping = mapping
         self.fmt = mapping.get("source_date_format", "%d/%m/%Y")
         self.as_of = (as_of or date.today()).isoformat()
@@ -256,6 +257,8 @@ class Validator:
             self.legacy_col[table].get(col, ""), col, check, action,
             "" if original is None else str(original), "" if value is None else str(value),
             message))
+        if action == "review":
+            self._reviewed.add((table, i, col))
         if i is not None and action in ("review", "dropped", "held"):
             rank = {"ok": 0, "held": 1, "review": 2, "dropped": 3}
             if rank[action] > rank[self.status[table][i]]:
@@ -527,8 +530,7 @@ class Validator:
                                f"{col} is required")
 
     def _has_review(self, table: str, i: int, col: str) -> bool:
-        return any(f.table == table and f.row_index == i and f.target_field == col
-                   and f.action == "review" for f in self.findings[-200:])
+        return (table, i, col) in self._reviewed
 
     def duplicate_keys(self, table: str) -> None:
         df = self.t[table]
