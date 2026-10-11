@@ -46,6 +46,34 @@ def corrupt(
 
 
 @app.command()
+def validate(
+    export: Path = typer.Argument(Path("data/legacy/legacy_export.xlsx"),
+                                  help="Legacy export (.xlsx with one sheet per table)."),
+    mapping: Path = typer.Option(Path("mappings/legacy_cmms.json"), help="Column/code mapping."),
+    out: Path = typer.Option(Path("out"), help="Output directory."),
+    as_of: str = typer.Option(None, help="Extract date (YYYY-MM-DD); later dates are flagged."),
+    truth: Path = typer.Option(None, help="Answer key directory, to score the run."),
+) -> None:
+    """Validate a legacy export: clean CSVs, exceptions.csv and a run summary."""
+    from datetime import date
+
+    from onboard.corrupt import read_legacy_xlsx
+    from onboard.mapping import load_mapping
+    from onboard.validate import validate as run, write_result
+
+    result = run(read_legacy_xlsx(export), load_mapping(mapping),
+                 date.fromisoformat(as_of) if as_of else None)
+    write_result(result, out)
+    typer.echo(result.summary_text())
+    typer.echo(f"wrote {out}/clean/, {out}/exceptions.csv, {out}/summary.txt")
+    if truth:
+        from onboard.score import score
+
+        for k, v in score(result, truth).as_dict().items():
+            typer.echo(f"{k:<20} {v}")
+
+
+@app.command()
 def version() -> None:
     """Print the package version."""
     from onboard import __version__
