@@ -53,5 +53,9 @@ def write_run(rr: RunResult, out: Path) -> None:
         json.dumps(rr.mapping_report, indent=2, ensure_ascii=False, default=str) + "\n")
     pd.DataFrame(rr.decisions).to_csv(out / "review_decisions.csv", index=False,
                                       lineterminator="\n")
+    questions = [d for d in rr.mapping_report.get("decisions", []) if d["decision"] == "review"]
+    pd.DataFrame(questions, columns=["kind", "sheet", "item", "decision", "detail", "confidence",
+                                     "reason"]).to_csv(out / "mapping_questions.csv",
+                                                       index=False, lineterminator="\n")
     write_result(rr.after, out)
     (out / "run.json").write_text(json.dumps({"usage": rr.usage}, indent=2) + "\n")

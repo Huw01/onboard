@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import json
 import statistics
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import date, datetime
 
@@ -30,6 +31,8 @@ from onboard.validate import DropRow, Override, Result, is_ambiguous_date
 
 MIN_CONFIDENCE = 0.85
 BATCH = 40
+REASONING_EFFORT = "medium"
+PARALLEL = 8
 NEIGHBOURS = 3
 NEIGHBOUR_WINDOW = 5
 DATE_TOLERANCE = 15     # days from the neighbours' median
@@ -47,6 +50,7 @@ Domain facts you can rely on:
   within a few weeks.
 - A PM's last-done date is normally the completion date of its latest work order.
 - Component assets are installed together with, or after, their parent asset.
+- Every date shown as context is one that cannot itself be a day/month misreading.
 - Labor is booked in hours; a value that equals plausible hours x 60 was probably typed
   in minutes.
 - Two asset rows that differ only in how the tag is written (case, separators) and have the
@@ -107,6 +111,11 @@ class CandidateFinder:
         self.out.append(Candidate(cid, kind, self.sheet[table], i, self.col[table][field],
                                   options, context))
 
+    def _trusted(self, table: str, i: int, field: str) -> bool:
+        """A date that can't be a day/month misreading (so it is safe as evidence)."""
+        raw = self._raw(table, i, field)
+        return bool(raw) and not is_ambiguous_date(raw)
+
     def _rows_with(self, table: str, check: str) -> set[int]:
         sheet = self.sheet.get(table)
         e = self.ex[(self.ex.sheet == sheet) & (self.ex.check == check)]
@@ -135,7 +144,9 @@ class CandidateFinder:
             k = pos[i]
             near = [order[x] for x in range(max(0, k - NEIGHBOUR_WINDOW),
                                             min(len(order), k + NEIGHBOUR_WINDOW + 1)) if x != k]
-            near_dates = [_d(wo.at[j, "reported_date"]) for j in near if wo.at[j, "reported_date"]]
+            near_dates = [_d(wo.at[j, "reported_date"]) for j in near
+                          if wo.at[j, "reported_date"] and self._trusted(t, j, "reported_date")]
+            rep_trusted = self._trusted(t, i, "reported_date")
             med = statistics.median_low(near_dates) if near_dates else None
             for f, raw in raws.items():
                 sw = _swap(raw, self.fmt)
@@ -146,7 +157,7 @@ class CandidateFinder:
                 if f == "reported_date" and med:
                     suspicious |= (abs((keep - med).days) > DATE_TOLERANCE
                                    and abs((swap - med).days) <= DATE_TOLERANCE)
-                elif f != "reported_date" and rep:
+                elif f != "reported_date" and rep and rep_trusted:
                     lo, hi = DELTA_RANGE
                     suspicious |= (not lo <= (keep - rep).days <= hi
                                    and lo <= (swap - rep).days <= hi)
@@ -157,10 +168,12 @@ class CandidateFinder:
                     "question": f"{self.col[t][f]} = '{raw}': keep as read ({sw[0]}) "
                                 f"or swap day/month ({sw[1]})?",
                     "type": wo.at[i, "wo_type"], "status": wo.at[i, "status"],
-                    "dates_as_read": {x: wo.at[i, x] for x in raws},
+                    "dates_as_read": {x: (wo.at[i, x] if x == f or self._trusted(t, i, x)
+                                          else "ambiguous") for x in raws},
                     "neighbours_reported": [
-                        [wo.at[j, "wo_id"], wo.at[j, "reported_date"]]
-                        for j in order[max(0, k - NEIGHBOURS):k] + order[k + 1:k + 1 + NEIGHBOURS]],
+                        [wo.at[j, "wo_id"], wo.at[j, "reported_date"]] for j in near
+                        if wo.at[j, "reported_date"] and self._trusted(t, j, "reported_date")
+                    ][:2 * NEIGHBOURS],
                 }
                 if wo.at[i, "pm_id"] in cadence:
                     ctx["pm_cadence_days"] = cadence[wo.at[i, "pm_id"]]
@@ -173,7 +186,8 @@ class CandidateFinder:
         pm, wo = self.r.staged[t], self.r.staged["work_orders"]
         done: dict[str, list[str]] = {}
         for j in self._live("work_orders"):
-            if wo.at[j, "pm_id"] and wo.at[j, "completed_date"]:
+            if (wo.at[j, "pm_id"] and wo.at[j, "completed_date"]
+                    and self._trusted("work_orders", j, "completed_date")):
                 done.setdefault(wo.at[j, "pm_id"], []).append(wo.at[j, "completed_date"])
         for i in self._live(t):
             sw = _swap(self._raw(t, i, "last_done_date"), self.fmt)
@@ -194,7 +208,8 @@ class CandidateFinder:
             return
         a = self.r.staged[t]
         live = self._live(t)
-        inst = {a.at[i, "asset_id"]: a.at[i, "install_date"] for i in live}
+        inst = {a.at[i, "asset_id"]: a.at[i, "install_date"] for i in live
+                if self._trusted(t, i, "install_date")}
         kids: dict[str, list[int]] = {}
         for i in live:
             if a.at[i, "parent_asset_id"]:
@@ -208,7 +223,8 @@ class CandidateFinder:
             if parent and inst.get(parent):
                 related.append(inst[parent])
             sibs = kids.get(parent, []) if parent else kids.get(a.at[i, "asset_id"], [])
-            related += [a.at[j, "install_date"] for j in sibs if j != i and a.at[j, "install_date"]]
+            related += [a.at[j, "install_date"] for j in sibs
+                        if j != i and a.at[j, "install_date"] and self._trusted(t, j, "install_date")]
             p_inst = _d(inst.get(parent)) if parent else None
             suspicious = (sw[1] in related and sw[0] not in related) or (
                 p_inst is not None and _d(sw[0]) < p_inst <= _d(sw[1]))
@@ -297,27 +313,36 @@ def _schema(ids: list[str], options: list[str]) -> dict:
 
 
 def ask(llm: LLM, candidates: list[Candidate]) -> list[dict]:
-    """One structured call per batch of same-kind questions. Returns decision rows."""
-    rows = []
+    """One structured call per batch of same-kind questions, batches in parallel.
+    Returns one decision row per candidate, in candidate order."""
+    batches = []
     for kind in ("date", "labor", "dup"):
         items = [c for c in candidates if c.kind == kind]
-        for b in range(0, len(items), BATCH):
-            batch = items[b:b + BATCH]
-            user = (f"QUESTIONS ({kind}, options: {', '.join(OPTIONS[kind])} or unsure)\n"
-                    + json.dumps([c.prompt_item() for c in batch], ensure_ascii=False,
-                                 separators=(",", ":"), default=str))
-            out = llm.json(f"review-{kind}", SYSTEM, user,
-                           _schema([c.id for c in batch], OPTIONS[kind]),
-                           schema_name="review_decisions")
-            got = {d["id"]: d for d in out["decisions"]}
-            for c in batch:
-                d = got.get(c.id, {"decision": "unsure", "confidence": 0.0,
-                                   "reason": "no answer returned"})
-                rows.append({"id": c.id, "kind": kind, "sheet": c.sheet,
-                             "row_index": c.row_index, "excel_row": c.row_index + 2,
-                             "field": c.field, "decision": d["decision"],
-                             "confidence": float(d["confidence"]), "reason": d["reason"],
-                             "options": json.dumps(c.options, default=str)})
+        batches += [(kind, items[b:b + BATCH]) for b in range(0, len(items), BATCH)]
+
+    def one(kind_batch):
+        kind, batch = kind_batch
+        user = (f"QUESTIONS ({kind}, options: {', '.join(OPTIONS[kind])} or unsure)\n"
+                + json.dumps([c.prompt_item() for c in batch], ensure_ascii=False,
+                             separators=(",", ":"), default=str))
+        return llm.json(f"review-{kind}", SYSTEM, user,
+                        _schema([c.id for c in batch], OPTIONS[kind]),
+                        schema_name="review_decisions", reasoning_effort=REASONING_EFFORT)
+
+    with ThreadPoolExecutor(max_workers=PARALLEL) as pool:
+        outputs = list(pool.map(one, batches))
+
+    rows = []
+    for (kind, batch), out in zip(batches, outputs):
+        got = {d["id"]: d for d in out["decisions"]}
+        for c in batch:
+            d = got.get(c.id, {"decision": "unsure", "confidence": 0.0,
+                               "reason": "no answer returned"})
+            rows.append({"id": c.id, "kind": kind, "sheet": c.sheet,
+                         "row_index": c.row_index, "excel_row": c.row_index + 2,
+                         "field": c.field, "decision": d["decision"],
+                         "confidence": float(d["confidence"]), "reason": d["reason"],
+                         "options": json.dumps(c.options, default=str)})
     return rows
 
 
