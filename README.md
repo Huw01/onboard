@@ -16,4 +16,12 @@ onboard corrupt    # legacy export + answer key -> data/legacy, data/ground_trut
 pytest
 ```
 
-All data is fully synthetic. MIT licensed.
+## Data
+
+| Path | What it is |
+|---|---|
+| `data/clean/` | The clean target-schema dataset: sites, locations, assets, PM schedules, work orders (seed 42). |
+| `data/legacy/legacy_export.xlsx` | The same data as a legacy CMMS export (sheets `LOCATIONS`, `EQUIPMENT`, `PM_SCHED`, `WORK_ORDERS`), plus one CSV per sheet. |
+| `data/ground_truth/` | The answer key: clean tables, `corruptions.csv` (every injected change by sheet, row, field, original and corrupted value, type), `row_map.csv`, `column_mapping.csv`. |
+
+The site (a fictional mine and port terminal) and all its data are synthetic. MIT licensed.
