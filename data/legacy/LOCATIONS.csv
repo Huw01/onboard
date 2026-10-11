@@ -1,0 +1,44 @@
+LOC_CD,LOC_DESC,PARENT_LOC,SITE_CD,LOC_TYPE
+GR,Granite Ridge Mine,,GR,SITE
+GR-PIT,Open Pit,GR,GR,AREA
+GR-PIT-01,Open Pit - North Bench,GR-PIT,GR,SYS
+GR-PIT-02	,Open Pit - South Bench,GR-PIT,GR,SYS
+GR-PIT-03,Open Pit - Haul Road,GR-PIT,GR,SYS
+GR-CRSH,Primary Crushing,GR,GR,AREA
+GR-CRSH-01,Primary Crushing - Crusher 1 Building,GR-CRSH,GR,SYS
+GR-CRSH-02,Primary Crushing - Crusher 2 Building,GR-CRSH,GR,SYS
+GR-CONV,Overland Conveying,GR,GR,AREA
+GR-CONV-01,Overland Conveying - Line 1,GR-CONV,GR,SYS
+GR-CONV-02,Overland Conveying - Line 2,GR-CONV,GR,SYS
+GR-CONV-03 ,Overland Conveying - Line 3,GR-CONV,GR,SYS
+GR-CONV-04,Overland Conveying - Transfer Towers,GR-CONV,GR,SYS
+GR-PLNT,Concentrator Plant,GR,GR,AREA
+GR-PLNT-01,Concentrator Plant - Grinding,GR-PLNT,GR,SYS
+GR-PLNT-02,Concentrator Plant - Flotation,GR-PLNT,GR,SYS
+GR-PLNT-03,Concentrator Plant - Thickening,GR-PLNT,GR,SYS
+GR-PLNT-04,Concentrator Plant - Filtration,GR-PLNT,GR,SYS
+GR-DWTR,Dewatering,GR,GR,AREA
+GR-DWTR-01,Dewatering - Pit Sumps,GR-DWTR,GR,SYS
+GR-DWTR-02,Dewatering - Booster Station,GR-DWTR,GR,SYS
+GR-DWTR-03,Dewatering - Tailings Return,GR-DWTR,GR,SYS
+GR-PWR,Power & BESS Yard,GR,GR,AREA
+GR-PWR-01,Power & BESS Yard - Main Substation,GR-PWR,GR,SYS
+GR-PWR-02,Power & BESS Yard - BESS Yard A,GR-PWR,GR,SYS
+GR-PWR-03,Power & BESS Yard - BESS Yard B,GR-PWR,GR,SYS
+GR-TSHOP,Truck Shop,GR,GR,AREA
+GR-TSHOP-01,Truck Shop - Service Bays,GR-TSHOP,GR,SYS
+GR-TSHOP-02,Truck Shop - Wash Bay,GR-TSHOP,GR,SYS
+GR-TSHOP-03,Truck Shop - Fuel Bay,GR-TSHOP,GR,SYS
+ PH ,Port Halden Rail & Port Terminal,,PH,SITE
+PH-RAIL,Rail Unloading,PH,PH,AREA
+PH-RAIL-01,Rail Unloading - Car Dumper,PH-RAIL,PH,SYS
+PH-RAIL-02,Rail Unloading - Dumper Conveyors,PH-RAIL,PH,SYS
+PH-STKY,Stockyard,PH,PH,AREA
+PH-STKY-01,Stockyard - Stacker Line,PH-STKY,PH,SYS
+PH-STKY-02,Stockyard - Reclaim Line,PH-STKY,PH,SYS
+PH-SHIP,Shiploading,PH,PH,AREA
+PH-SHIP-01,Shiploading - Shiploader,PH-SHIP,PH,SYS
+PH-SHIP-02,Shiploading - Berth Conveyors,PH-SHIP,PH,SYS
+PH-PWR,Substation & BESS,PH,PH,AREA
+PH-PWR-01,Substation & BESS - Port Substation,PH-PWR,PH,SYS
+PH-PWR-02,Substation & BESS - BESS Yard,PH-PWR,PH,SYS

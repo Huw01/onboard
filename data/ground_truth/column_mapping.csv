@@ -1,0 +1,38 @@
+legacy_sheet,legacy_column,target_table,target_column,baseline_transform
+LOCATIONS,LOC_CD,locations,location_id,as is
+LOCATIONS,LOC_DESC,locations,name,as is
+LOCATIONS,PARENT_LOC,locations,parent_location_id,as is
+LOCATIONS,SITE_CD,locations,site_id,as is
+LOCATIONS,LOC_TYPE,locations,location_type,"code map {'SITE': 'SITE', 'AREA': 'AREA', 'SYSTEM': 'SYS'}"
+EQUIPMENT,EQUIP_NO,assets,asset_id,as is
+EQUIPMENT,EQUIP_DESC,assets,description,as is
+EQUIPMENT,EQ_CLASS,assets,asset_class,"4-letter legacy class code, see CLASS_CODES"
+EQUIPMENT,PARENT_EQ,assets,parent_asset_id,as is
+EQUIPMENT,LOC_CD,assets,location_id,as is
+EQUIPMENT,CRIT,assets,criticality,"code map {1: 'A', 2: 'B', 3: 'C'}"
+EQUIPMENT,MFR,assets,manufacturer,as is
+EQUIPMENT,MODEL_NO,assets,model,as is
+EQUIPMENT,SERIAL_NO,assets,serial_number,as is
+EQUIPMENT,INSTALL_DT,assets,install_date,DD/MM/YYYY
+EQUIPMENT,METER_TYPE,assets,meter_type,"code map {'HOURS': 'HRS', 'KM': 'KM', 'CYCLES': 'CYC', 'MWH': 'MWH', 'NONE': 'N/A'}"
+EQUIPMENT,EQ_STATUS,assets,status,"code map {'ACTIVE': 'A', 'INACTIVE': 'I'}"
+PM_SCHED,PM_NO,pm_schedules,pm_id,as is
+PM_SCHED,EQUIP_NO,pm_schedules,asset_id,as is
+PM_SCHED,PM_DESC,pm_schedules,description,as is
+PM_SCHED,PM_TYPE,pm_schedules,trigger_type,"code map {'TIME': 'T', 'METER': 'M'}"
+PM_SCHED,PM_FREQ,pm_schedules,frequency_value,number
+PM_SCHED,FREQ_UOM,pm_schedules,frequency_unit,"code map {'DAYS': 'D', 'HOURS': 'H', 'KM': 'KM', 'CYCLES': 'CYC', 'MWH': 'MWH'}"
+PM_SCHED,CRAFT,pm_schedules,craft,as is
+PM_SCHED,EST_HRS,pm_schedules,est_labor_hours,number (hours)
+PM_SCHED,LAST_DONE_DT,pm_schedules,last_done_date,DD/MM/YYYY
+WORK_ORDERS,WO_NUM,work_orders,wo_id,as is
+WORK_ORDERS,EQUIP_NO,work_orders,asset_id,as is
+WORK_ORDERS,PM_NO,work_orders,pm_id,as is
+WORK_ORDERS,WO_TYPE,work_orders,wo_type,as is
+WORK_ORDERS,WO_STATUS,work_orders,status,"code map {'OPEN': 'WAPPR', 'IN_PROGRESS': 'INPRG', 'COMPLETED': 'COMP', 'CANCELLED': 'CAN'}"
+WORK_ORDERS,PRIORITY,work_orders,priority,as is
+WORK_ORDERS,WO_DESC,work_orders,description,as is
+WORK_ORDERS,OPEN_DT,work_orders,reported_date,DD/MM/YYYY
+WORK_ORDERS,SCHED_DT,work_orders,scheduled_date,DD/MM/YYYY
+WORK_ORDERS,COMP_DT,work_orders,completed_date,DD/MM/YYYY
+WORK_ORDERS,LABOR_HRS,work_orders,labor_hours,number (hours)
