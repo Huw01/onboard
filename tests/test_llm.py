@@ -16,7 +16,7 @@ class Echo:
         self.n = 0
         self.usage = usage
 
-    def __call__(self, model, messages, fmt):
+    def __call__(self, model, messages, fmt, **opts):
         self.n += 1
         return json.dumps({"x": len(messages[1]["content"])}), self.usage
 

@@ -21,6 +21,7 @@ import csv
 import hashlib
 import json
 import os
+import threading
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
@@ -94,7 +95,7 @@ def find_api_key() -> str | None:
 
 
 # A transport sends one request and returns (content, Usage). Swappable for tests.
-Transport = Callable[[str, list[dict], dict], tuple[str, Usage]]
+Transport = Callable[..., tuple[str, Usage]]   # (model, messages, response_format, **opts)
 
 
 def openai_transport(api_key: str, base_url: str = BASE_URL) -> Transport:
@@ -102,9 +103,10 @@ def openai_transport(api_key: str, base_url: str = BASE_URL) -> Transport:
 
     client = OpenAI(api_key=api_key, base_url=base_url, timeout=600)
 
-    def send(model: str, messages: list[dict], response_format: dict) -> tuple[str, Usage]:
+    def send(model: str, messages: list[dict], response_format: dict,
+             **opts) -> tuple[str, Usage]:
         r = client.chat.completions.create(model=model, messages=messages,
-                                           response_format=response_format)
+                                           response_format=response_format, **opts)
         u = r.usage
         ptd = getattr(u, "prompt_tokens_details", None)
         ctd = getattr(u, "completion_tokens_details", None)
@@ -136,11 +138,15 @@ class LLM:
         self._transport = transport
         self.run_id = run_id or datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         self.calls: list[dict] = []
+        self._lock = threading.Lock()
 
     # ---- helpers ---------------------------------------------------------
-    def request_key(self, system: str, user: str, schema: dict) -> str:
-        blob = json.dumps({"model": self.model, "system": system, "user": user,
-                           "schema": schema}, sort_keys=True, ensure_ascii=False)
+    def request_key(self, system: str, user: str, schema: dict,
+                    reasoning_effort: str | None = None) -> str:
+        req = {"model": self.model, "system": system, "user": user, "schema": schema}
+        if reasoning_effort:
+            req["reasoning_effort"] = reasoning_effort
+        blob = json.dumps(req, sort_keys=True, ensure_ascii=False)
         return hashlib.sha256(blob.encode()).hexdigest()[:16]
 
     def fixture_path(self, task: str, key: str) -> Path:
@@ -160,8 +166,8 @@ class LLM:
 
     # ---- the one entry point ----------------------------------------------
     def json(self, task: str, system: str, user: str, schema: dict,
-             schema_name: str = "result") -> dict:
-        key = self.request_key(system, user, schema)
+             schema_name: str = "result", reasoning_effort: str | None = None) -> dict:
+        key = self.request_key(system, user, schema, reasoning_effort)
         path = self.fixture_path(task, key)
         if self.mode in ("replay", "auto") and path.exists():
             rec = json.loads(path.read_text())
@@ -173,15 +179,18 @@ class LLM:
                         {"role": "user", "content": user}]
             fmt = {"type": "json_schema",
                    "json_schema": {"name": schema_name, "schema": schema, "strict": True}}
-            send = self._get_transport()
+            with self._lock:
+                send = self._get_transport()
+            opts = {"reasoning_effort": reasoning_effort} if reasoning_effort else {}
             t0 = time.perf_counter()
-            content, usage = send(self.model, messages, fmt)
+            content, usage = send(self.model, messages, fmt, **opts)
             latency = time.perf_counter() - t0
             cost = usage.cost_usd if usage.cost_usd is not None else estimate_cost(
                 self.model, usage)
             rec = {"task": task, "key": key, "model": self.model,
                    "recorded_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                    "latency_s": round(latency, 3),
+                   "reasoning_effort": reasoning_effort or "default (high)",
                    "usage": {**asdict(usage), "cost_usd": round(cost, 6),
                              "cost_exact": usage.cost_usd is not None},
                    "messages": messages, "response_format": fmt, "content": content}
@@ -200,16 +209,17 @@ class LLM:
                "completion_tokens": u["completion_tokens"],
                "reasoning_tokens": u["reasoning_tokens"],
                "latency_s": rec["latency_s"], "cost_usd": u["cost_usd"]}
-        self.calls.append(row)
-        if self.usage_path is None:
-            return
-        self.usage_path.parent.mkdir(parents=True, exist_ok=True)
-        new = not self.usage_path.exists()
-        with self.usage_path.open("a", newline="") as f:
-            w = csv.DictWriter(f, fieldnames=USAGE_FIELDS)
-            if new:
-                w.writeheader()
-            w.writerow(row)
+        with self._lock:
+            self.calls.append(row)
+            if self.usage_path is None:
+                return
+            self.usage_path.parent.mkdir(parents=True, exist_ok=True)
+            new = not self.usage_path.exists()
+            with self.usage_path.open("a", newline="") as f:
+                w = csv.DictWriter(f, fieldnames=USAGE_FIELDS)
+                if new:
+                    w.writeheader()
+                w.writerow(row)
 
     def totals(self) -> dict:
         keys = ["prompt_tokens", "cached_tokens", "completion_tokens", "reasoning_tokens"]
