@@ -26,3 +26,6 @@ dist/
 
 # Run output
 out/
+
+# Demo build: stills from `make_demo_video.py --frames`
+docs/media/frame_*.png

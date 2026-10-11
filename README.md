@@ -2,6 +2,10 @@
 
 **LLM-assisted data onboarding for enterprise systems.**
 
+![Demo: the messy legacy export, a computer-use agent fixing cells by hand vs. the direct API pipeline, and the results](docs/media/demo.gif)
+
+<sub>28-second highlights. The full walkthrough (about 77 s, 1080p) is [`docs/media/demo.mp4`](docs/media/demo.mp4); it will be embedded here as a player once the repo is pushed, because GitHub only plays an MP4 inline when it is uploaded through the web editor. Rebuild both with `python scripts/make_demo_video.py` (needs ffmpeg and the raw computer-use recording, which is not in the repo). The terminal part is a real `onboard run` replaying the recorded responses in `tests/fixtures/llm/`; every number comes from [`docs/eval.md`](docs/eval.md).</sub>
+
 Every enterprise system go-live starts the same way. The customer hands over a legacy export with cryptic column names, duplicate records, broken hierarchies, mixed date formats and free-text values, and someone spends days mapping and cleaning it by hand. `onboard` lets an LLM make the fuzzy calls (which column is which, what a legacy code means), wraps every value in deterministic checks so nothing gets silently corrupted, routes the edge cases to a person, and proves the result with evals against a known answer key.
 
 The worked example is a CMMS/EAM migration (assets, PM schedules, work orders) for a synthetic mine and port terminal.
@@ -138,7 +142,7 @@ Rules + LLM review pass (243 questions: 187 dates, 38 labor, 18 duplicates; 173 
 | false positives (clean rows held: all from codes left for a person) | 39 | 39 |
 | rows loaded identical to ground truth | 6,884 / 7,893 | 6,976 / 7,893 |
 
-**Cost per full run**: 8 calls, 60,413 input tokens (9,216 cached), 15,889 output + 95,062 reasoning tokens, **$0.77** (provider-reported), 1517 s of model time (review batches run in parallel).
+**Cost per full run**: 8 calls, 60,413 input tokens (9,216 cached), 15,889 output + 95,062 reasoning tokens, **$0.77** (provider-reported). Wall time of a live run ≈ **11 min** (mapping call, then the slowest of the parallel review batches; 1517 s of model time in total). Replaying the recorded responses takes seconds and needs no key.
 <!-- EVAL:END -->
 
 ## From computer-use prototype to API
