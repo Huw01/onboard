@@ -28,8 +28,8 @@ from onboard.schema import CODED_FIELDS, FIELD_DOCS, TABLES
 COLUMN_MIN_CONFIDENCE = 0.6
 CODE_MIN_CONFIDENCE = 0.8
 DATE_FORMATS = ["%d/%m/%Y", "%m/%d/%Y", "%Y-%m-%d"]
+RELATIONS = ["same_meaning", "needs_conversion", "uncertain"]
 N_SAMPLES = 6
-N_TOP = 15
 MAX_DISTINCT_FOR_CODES = 40
 
 
@@ -56,7 +56,7 @@ def profile_sheet(name: str, df: pd.DataFrame) -> dict:
                "shapes": dict(Counter(_shape(v) for v in filled).most_common(4)),
                "samples": samples}
         if 0 < len(counts) <= MAX_DISTINCT_FOR_CODES:
-            col["values"] = dict(counts.most_common(N_TOP))
+            col["values"] = dict(counts.most_common())   # every value: codes must all be seen
         cols.append(col)
     return {"sheet": name, "rows": n, "columns": cols}
 
@@ -79,9 +79,15 @@ target schema. Decide:
 - which date format the export uses for dates (the majority format).
 Rules:
 - Base every decision on the column names, values and shapes in the profile.
-- A code translation must be an exact synonym. If a code could mean something else, or
-  would need a unit conversion (miles vs km, weeks vs days, kWh vs MWh), set
-  exact_synonym to false. Never guess: a wrong translation silently corrupts data.
+- For every observed code of a coded column, say how it relates to the target value:
+  "same_meaning": the code denotes exactly that value. Abbreviations (CONV = CONVEYOR),
+    standard rank letters (A/B/C = 1/2/3 when 1 is the highest rank) and status or unit
+    codes whose meaning is clear from the column all count, with no arithmetic needed.
+  "needs_conversion": the value only matches after a calculation (weeks vs days, miles vs
+    km, kWh vs MWh, minutes vs hours).
+  "uncertain": the code could plausibly mean something else.
+  Only "same_meaning" translations are applied automatically; the rest go to a person.
+  Never guess: a wrong translation silently corrupts data.
 - Give each decision a confidence between 0 and 1 and a one-line reason."""
 
 
@@ -111,11 +117,11 @@ def response_schema() -> dict:
               "properties": {"source": txt, "target": {"type": "string", "enum": fields},
                              "confidence": num, "reason": txt}}
     code = {"type": "object", "additionalProperties": False,
-            "required": ["source_column", "code", "value", "exact_synonym", "confidence",
+            "required": ["source_column", "code", "value", "relation", "confidence",
                          "reason"],
             "properties": {"source_column": txt, "code": txt, "value": txt,
-                           "exact_synonym": {"type": "boolean"}, "confidence": num,
-                           "reason": txt}}
+                           "relation": {"type": "string", "enum": RELATIONS},
+                           "confidence": num, "reason": txt}}
     sheet = {"type": "object", "additionalProperties": False,
              "required": ["sheet", "table", "confidence", "reason", "columns", "codes"],
              "properties": {"sheet": txt, "table": {"type": "string", "enum": tables},
@@ -226,8 +232,8 @@ def apply_guards(proposal: dict, legacy: dict[str, pd.DataFrame]) -> tuple[dict,
             elif value is None:
                 note("code", sheet, item, "rejected", "value not allowed for the field",
                      k["confidence"], k["reason"])
-            elif not k["exact_synonym"]:
-                note("code", sheet, item, "review", "not an exact synonym, left for review",
+            elif k["relation"] != "same_meaning":
+                note("code", sheet, item, "review", f"{k['relation']}, left for review",
                      k["confidence"], k["reason"])
             elif k["confidence"] < CODE_MIN_CONFIDENCE:
                 note("code", sheet, item, "review", "low confidence, left for review",
@@ -272,7 +278,7 @@ def _non_identity(vm: dict) -> dict:
 
 
 def mapping_accuracy(proposed: dict, reference: dict) -> dict:
-    sheets_ok = cols_ok = cols_n = codes_ok = codes_n = codes_wrong = 0
+    sheets_ok = cols_ok = cols_n = codes_ok = codes_n = codes_wrong = codes_missing = 0
     errors = []
     for sheet, ref in reference["sheets"].items():
         got = proposed["sheets"].get(sheet)
@@ -295,7 +301,11 @@ def mapping_accuracy(proposed: dict, reference: dict) -> dict:
                 codes_n += 1
                 if mine.get(code) == val:
                     codes_ok += 1
+                elif code not in mine:
+                    codes_missing += 1
+                    errors.append(f"{sheet}.{field} code {code}: left for review (= {val})")
                 else:
+                    codes_wrong += 1
                     errors.append(f"{sheet}.{field} code {code}: {mine.get(code)} != {val}")
         for field, vm in got_vm.items():
             ref_vm = ref["value_maps"].get(field, {})
@@ -310,7 +320,8 @@ def mapping_accuracy(proposed: dict, reference: dict) -> dict:
         "sheets_correct": sheets_ok, "sheets_total": n_sheets,
         "columns_correct": cols_ok, "columns_total": cols_n,
         "codes_correct": codes_ok, "codes_total": codes_n,
-        "codes_extra_wrong": codes_wrong,
+        "codes_missing": codes_missing,      # left untranslated -> review (safe)
+        "codes_wrong": codes_wrong,          # translated to the wrong value (unsafe)
         "date_format_correct": proposed["source_date_format"] == reference["source_date_format"],
         "column_accuracy": round(cols_ok / cols_n, 4) if cols_n else 1.0,
         "code_accuracy": round(codes_ok / codes_n, 4) if codes_n else 1.0,

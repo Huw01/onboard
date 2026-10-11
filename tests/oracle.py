@@ -33,7 +33,7 @@ def oracle_proposal(legacy) -> dict:
             for code, val in vm.items():
                 if code in observed:
                     codes.append({"source_column": src, "code": code, "value": str(val),
-                                  "exact_synonym": True, "confidence": 0.95,
+                                  "relation": "same_meaning", "confidence": 0.95,
                                   "reason": "oracle"})
         sheets.append({"sheet": sheet, "table": table, "confidence": 0.99, "reason": "oracle",
                        "columns": cols, "codes": codes})
@@ -57,7 +57,7 @@ class FakeTransport:
         self.usage = usage
         self.calls = 0
 
-    def __call__(self, model, messages, response_format):
+    def __call__(self, model, messages, response_format, **opts):
         self.calls += 1
         name = response_format["json_schema"]["name"]
         if name == "mapping_proposal":

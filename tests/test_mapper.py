@@ -54,7 +54,7 @@ def test_correct_proposal_reproduces_the_reference_mapping(legacy):
     assert _norm(mapping) == _norm(reference_mapping())
     acc = mapping_accuracy(_norm(mapping), _norm(reference_mapping()))
     assert acc["column_accuracy"] == 1.0 and acc["code_accuracy"] == 1.0
-    assert acc["codes_extra_wrong"] == 0 and acc["date_format_correct"]
+    assert acc["codes_wrong"] == 0 and acc["date_format_correct"]
 
 
 def test_guards_reject_bad_proposals(legacy):
@@ -67,14 +67,14 @@ def test_guards_reject_bad_proposals(legacy):
                           "reason": "no such column"})
     next(c for c in eq["columns"] if c["source"] == "SERIAL_NO")["confidence"] = 0.3
     pm["codes"] += [
-        {"source_column": "FREQ_UOM", "code": "W", "value": "DAYS", "exact_synonym": False,
-         "confidence": 0.9, "reason": "weeks need x7, not a synonym"},
-        {"source_column": "FREQ_UOM", "code": "W", "value": "DAYS", "exact_synonym": True,
+        {"source_column": "FREQ_UOM", "code": "W", "value": "DAYS", "relation": "needs_conversion",
+         "confidence": 0.9, "reason": "weeks need x7"},
+        {"source_column": "FREQ_UOM", "code": "W", "value": "DAYS", "relation": "same_meaning",
          "confidence": 0.5, "reason": "weeks?"},
         {"source_column": "FREQ_UOM", "code": "FORTNIGHT", "value": "DAYS",
-         "exact_synonym": True, "confidence": 0.99, "reason": "not in data"},
+         "relation": "same_meaning", "confidence": 0.99, "reason": "not in data"},
         {"source_column": "PM_TYPE", "code": "T", "value": "SOMETIMES",
-         "exact_synonym": True, "confidence": 0.99, "reason": "not allowed"},
+         "relation": "same_meaning", "confidence": 0.99, "reason": "not allowed"},
     ]
     mapping, log = apply_guards(p, legacy)
     assert "MFR" in mapping["sheets"]["EQUIPMENT"]["columns"]  # original kept
@@ -84,7 +84,7 @@ def test_guards_reject_bad_proposals(legacy):
     assert "W" not in uom and "FORTNIGHT" not in uom
     assert mapping["sheets"]["PM_SCHED"]["value_maps"]["trigger_type"]["T"] == "TIME"
     decided = {(e["item"], e["decision"], e["detail"]) for e in log}
-    assert ("FREQ_UOM: W -> DAYS", "review", "not an exact synonym, left for review") in decided
+    assert ("FREQ_UOM: W -> DAYS", "review", "needs_conversion, left for review") in decided
     assert ("FREQ_UOM: W -> DAYS", "review", "low confidence, left for review") in decided
     decided = {(e["item"], e["decision"]) for e in log}
     assert ("FREQ_UOM: FORTNIGHT -> DAYS", "rejected") in decided
@@ -119,4 +119,6 @@ def test_accuracy_counts_errors():
     acc = mapping_accuracy(bad, ref)
     assert acc["columns_correct"] == acc["columns_total"] - 1
     assert acc["codes_correct"] == acc["codes_total"] - 1
-    assert acc["codes_extra_wrong"] == 1
+    assert acc["codes_wrong"] == 2  # A -> 3 and the invented MI -> KM
+    del bad["sheets"]["EQUIPMENT"]["value_maps"]["criticality"]["A"]
+    assert mapping_accuracy(bad, ref)["codes_missing"] == 1
