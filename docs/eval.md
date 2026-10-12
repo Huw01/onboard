@@ -134,9 +134,29 @@ To check the pipeline on data it was not developed against, `scripts/make_heldou
 
 In total it has 2,231 injected corruptions in 7,890 rows. None of the mapper, the validator or the LLM fixtures had seen it. No code was changed for it.
 
-**Live run: did not complete.** The run was `python scripts/live_eval.py --out out/heldout --export data/heldout/legacy_export.xlsx …`. The mapping call to xAI failed with `Server disconnected without sending a response` on all 3 client attempts, about 4.5 min each, and failed the same way when the whole run was retried (6 attempts, ≈ 27 min). The prompt was the same size as on the main export (10.8K vs 11.5K characters), where the mapping call returns in about 2.5 min. The likely cause is that the model reasons longer on the unfamiliar names and codes and the connection is closed at about 4.5 min. The pipeline failed closed: nothing was mapped, validated or written. Making it work needs a client change (streaming or a longer-lived connection), which this eval deliberately did not make. So there are **no live mapping or LLM-review numbers for the held-out export yet.** Whether any tokens were billed for the dropped calls is unknown, because no usage came back.
+**Live run (rules + LLM, grok-4.7, one run).** Command: `python scripts/live_eval.py --out out/heldout --export data/heldout/legacy_export.xlsx --truth data/heldout/ground_truth --reference data/heldout/reference_mapping.json`. It cost **$0.905** for 10 calls and took 12.2 min. The mapping call alone took 7.7 min, about three times as long as on the main export.
 
-**Rules only, with the correct mapping** (the deterministic half on its own, no LLM; mapping written by hand in `data/heldout/reference_mapping.json`):
+| | held-out (live) | main export (recorded) | main export (3 live runs, mean) |
+|---|---:|---:|---:|
+| legacy columns mapped correctly | 35 / 35 | 37 / 37 | 37 / 37 |
+| code translations correct / left for a person / wrong | 39 / 5 / 0 | 32 / 3 / 0 | 34 / 1 / 0 |
+| auto-fixed (fixed + duplicates removed) | 1,605 (71.9%) | 1,660 (79.2%) | 1,725.7 (82.3%) |
+| routed to a person | 540 (24.2%) | 357 (17.0%) | 286.3 (13.7%) |
+| undetected (loaded wrong) | 86 (3.9%) | 80 (3.8%) | 85 (4.1%) |
+| **correct cells changed by the LLM** | **0** | **0** | 0.33 |
+| clean rows held anyway (false positives) | 164 | 39 | 21 |
+| injected corruptions | 2,231 | 2,097 | 2,097 |
+
+The held-out run is worse, in the safe direction: more went to a person, and nothing that was correct got changed.
+
+* **Column mapping held up.** All 35 mappable columns, renamed SAP-style, went to the right field. The date format was right. `MAKE_MODEL` was correctly left unmapped rather than forced into one field. Of the 1,119 assets loaded, all have blank manufacturer and model (2,238 blank cells, the only differences from ground truth outside the corruption log). They're empty, not wrong, and a real migration would need a split rule.
+* **Codes: none wrong, 5 left for a person.** `HYD` (HPU), `INV` (PCS), `AC` (HVAC), `REL` (in progress) and `DLFL` (cancelled) were all plausible but unsure readings, so the guard didn't apply them. That's the main cost: 164 clean rows held for a person to confirm a code. `DLFL` alone accounts for 116 of them.
+* **The unseen corruption types were never loaded wrong.** All 90 decimal commas were held. Of the 50 thousands separators, 35 were parsed to the right value and 15 were held.
+* **The 86 undetected are all day/month dates valid either way round**, the same known limit as on the main export.
+
+**Transport change before this run (no prompt or logic change).** The first two attempts at this live run failed, before any change: the mapping call was dropped with `Server disconnected without sending a response`, about 4.5 min into each of 6 attempts (≈ 27 min; nothing was mapped or written, and whether those calls were billed is unknown). `llm.py` now uses a streaming request: same model, messages, schema and parsed result, with usage taken from the final chunk. It also uses a 900 s timeout and no automatic client retries, so a failure costs one call, not three. Prompts, request keys, fixtures, guards and scoring are unchanged, and replay and the tests behave the same.
+
+**Rules only, with the correct mapping**, for comparison (the deterministic half on its own, no LLM; mapping written by hand in `data/heldout/reference_mapping.json`):
 
 | outcome | count | share of 2,231 |
 |---|---:|---:|

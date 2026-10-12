@@ -23,7 +23,7 @@ The principle: **the AI never silently changes data.** Every loaded value is eit
 <!-- KEY:END -->
 
 How these are measured, the full breakdown per corruption type and the rules-only baseline: [`docs/eval.md`](docs/eval.md).
-On a held-out export with renamed columns and unseen corruption types, the live mapping call did not complete; no file was written ([details](docs/eval.md#held-out)).
+On a held-out export (renamed columns, new codes, unseen number formats) the live run mapped 35/35 columns and changed 0 correct cells, but routed more to a person (24% vs 17%) ([held-out results](docs/eval.md#held-out)).
 
 ![Before: the legacy export](docs/img/before.png)
 
