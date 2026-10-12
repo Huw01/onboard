@@ -101,13 +101,23 @@ Transport = Callable[..., tuple[str, Usage]]   # (model, messages, response_form
 def openai_transport(api_key: str, base_url: str = BASE_URL) -> Transport:
     from openai import OpenAI
 
-    client = OpenAI(api_key=api_key, base_url=base_url, timeout=600)
+    # Streaming keeps the connection busy while the model reasons, so long mapping calls
+    # are not cut off as idle (transport only: same request, same parsed result).
+    client = OpenAI(api_key=api_key, base_url=base_url, timeout=900, max_retries=0)
 
     def send(model: str, messages: list[dict], response_format: dict,
              **opts) -> tuple[str, Usage]:
-        r = client.chat.completions.create(model=model, messages=messages,
-                                           response_format=response_format, **opts)
-        u = r.usage
+        stream = client.chat.completions.create(
+            model=model, messages=messages, response_format=response_format, stream=True,
+            stream_options={"include_usage": True}, **opts)
+        parts, u = [], None
+        for chunk in stream:
+            if chunk.choices and chunk.choices[0].delta.content:
+                parts.append(chunk.choices[0].delta.content)
+            if getattr(chunk, "usage", None):
+                u = chunk.usage
+        if u is None:
+            raise RuntimeError("stream ended without a usage chunk")
         ptd = getattr(u, "prompt_tokens_details", None)
         ctd = getattr(u, "completion_tokens_details", None)
         ticks = getattr(u, "cost_in_usd_ticks", None)
@@ -120,7 +130,7 @@ def openai_transport(api_key: str, base_url: str = BASE_URL) -> Transport:
             reasoning_tokens=(getattr(ctd, "reasoning_tokens", 0) or 0) if ctd else 0,
             cost_usd=ticks / 1e10 if ticks is not None else None,
         )
-        return r.choices[0].message.content, usage
+        return "".join(parts), usage
 
     return send
 
