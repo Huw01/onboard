@@ -136,7 +136,8 @@ def key_numbers(e: dict) -> str:
     m, u = e["mapping"], e["usage"]
     return (f"**{m['columns_correct']} / {m['columns_total']}** legacy columns mapped correctly "
             f"by the LLM · **{e['silent_outside_corruptions_after']}** correct cells changed by "
-            f"the LLM · **≈ ${u['cost_usd']:.2f}** per full run")
+            f"the LLM in the recorded run (1 cell across 3 live reruns) · "
+            f"**$0.58–{u['cost_usd']:.2f}** per full run")
 
 
 def baseline() -> str:

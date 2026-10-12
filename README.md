@@ -19,10 +19,11 @@ Every enterprise system go-live starts with someone else's data. The customer ha
 The principle: **the AI never silently changes data.** Every loaded value is either untouched, fixed by a certain rule, or decided by a person, and you can see which. That is how migrations are done safely at enterprise clients: automation does the volume, deterministic checks keep it honest, and people make the judgement calls, with a record of all of it.
 
 <!-- KEY:START -->
-**37 / 37** legacy columns mapped correctly by the LLM · **0** correct cells changed by the LLM · **≈ $0.77** per full run
+**37 / 37** legacy columns mapped correctly by the LLM · **0** correct cells changed by the LLM in the recorded run (1 cell across 3 live reruns) · **$0.58–0.77** per full run
 <!-- KEY:END -->
 
 How these are measured, the full breakdown per corruption type and the rules-only baseline: [`docs/eval.md`](docs/eval.md).
+On a held-out export with renamed columns and unseen corruption types, the live mapping call did not complete; no file was written ([details](docs/eval.md#held-out)).
 
 ![Before: the legacy export](docs/img/before.png)
 

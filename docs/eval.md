@@ -96,3 +96,55 @@ What the deterministic validator does on its own, given the hand-written referen
 The silent errors are 104 day/month dates that are valid either way round, 2 labor values recorded in minutes that still look like hours. Once a date column is known to mix DD/MM and MM/DD the validator raises a column-level warning with the count, but no rule can say which reading is right; the fix belongs at the source. The tests pin this down: zero false positives, and only these two kinds are ever missed.
 
 <!-- LIVE RUNS: hand-maintained below this line -->
+
+## Run-to-run variance
+
+The numbers above come from one recorded run (the fixtures in `tests/fixtures/llm/`), which CI replays. To see how much a fresh run moves, the main export was run **3 more times live** against xAI (grok-4.7, no cache: `python scripts/live_eval.py --runs 3 --out out/variance`), each scored against the same answer key of 2,097 injected corruptions.
+
+| | run 1 | run 2 | run 3 | mean ± sd (live) | recorded run |
+|---|---:|---:|---:|---:|---:|
+| legacy columns mapped correctly | 37 / 37 | 37 / 37 | 37 / 37 | 37 ± 0 | 37 / 37 |
+| code translations correct / left for a person / wrong | 34 / 1 / 0 | 34 / 1 / 0 | 34 / 1 / 0 | 34 / 1 / 0 | 32 / 3 / 0 |
+| auto-fixed (fixed + duplicates removed) | 1,726 | 1,729 | 1,722 | 1,725.7 ± 3.5 | 1,660 |
+| routed to a person | 286 | 283 | 290 | 286.3 ± 3.5 | 357 |
+| undetected (loaded wrong) | 85 | 85 | 85 | 85 ± 0 | 80 |
+| **correct cells changed by the LLM** | **0** | **0** | **1** | 0.33 | **0** |
+| clean rows held anyway (false positives) | 21 | 21 | 21 | 21 ± 0 | 39 |
+| review questions asked / LLM answers accepted | 243 / 192 | 243 / 197 | 243 / 190 | 243 / 193 ± 3.6 | |
+| cost (8 API calls) | $0.631 | $0.579 | $0.641 | $0.617 ± 0.034 | $0.773 |
+| measured wall time | 5.6 min | 9.8 min | 16.6 min | 10.7 ± 5.6 min | ≈ 11 min (estimated) |
+
+What moves and what doesn't:
+
+* **The mapping was identical in all three runs.** All 37 columns were right and no code was translated wrongly. Each run left one code for a person: `WAPPR` (work-order status "waiting approval" = OPEN). That one gap causes all 21 false positives, because those clean rows are held for a person to confirm the code. The recorded run left three codes (`BATT`, `STKR`, `WAPPR`), hence 39 false positives there. The share routed to a person is lower in the live runs for the same reason.
+* **Undetected errors were 85 in every run:** 83 day/month dates valid either way round and 2 labor values in minutes. The validator (not the LLM) decides these, so they don't vary. The recorded run's 80 differs because its review answers differed.
+* **Run 3 changed one correct cell.** On WO-103464 the reported date `04/12/2025` (4 Dec, correct) was swapped to 2025-04-12. The model's own stated reason argued *for* 2025-12-04, but it picked the swapped option. The validator accepted the answer because both readings are valid dates and the swap is one of the two options a date question offers. That's a guard gap: an answer whose reason contradicts the chosen option isn't detected. So the honest claim is **0 correct cells changed in the recorded run and in 2 of 3 live reruns, 1 of ~7,900 rows in the third**. This is not fixed yet. An obvious guard would be to only accept a date swap when it doesn't break the work-order date sequence, or to send low-margin date answers to a person.
+* **Wall time varies a lot (5.6 to 16.6 min)** with API latency, mostly from the slowest review batch. Cost varies little (±5%).
+
+## Held-out
+
+To check the pipeline on data it was not developed against, `scripts/make_heldout.py` builds a second export, `data/heldout/legacy_export.xlsx`. It differs from the main export in these ways:
+
+* a different seed (7) for both the clean data and the corruptions;
+* SAP-style sheet names in a different order (`ASSET_REG`, `JOB_HIST`, `MAINT_PLAN`, `FUNC_LOC`);
+* renamed and reordered columns (`TAG`, `SUP_TAG`, `FLOC`, `OBJ_TYPE`, `ABC_IND`, `START_UP`, `USR_STAT`, `ACT_WORK`, …);
+* different legacy codes (classes `CVY`, `S/R`, `INV`…; criticality `H/M/L`; statuses `CRTD/REL/TECO/DLFL`…);
+* a merged `MAKE_MODEL` column (`<manufacturer> / <model>`);
+* two corruption types the validator was not written for: decimal commas in hours (`2,5`, 90 cells) and thousands separators in PM intervals (`2,000`, plus European `8.000`, 50 cells).
+
+In total it has 2,231 injected corruptions in 7,890 rows. None of the mapper, the validator or the LLM fixtures had seen it. No code was changed for it.
+
+**Live run: did not complete.** The run was `python scripts/live_eval.py --out out/heldout --export data/heldout/legacy_export.xlsx …`. The mapping call to xAI failed with `Server disconnected without sending a response` on all 3 client attempts, about 4.5 min each, and failed the same way when the whole run was retried (6 attempts, ≈ 27 min). The prompt was the same size as on the main export (10.8K vs 11.5K characters), where the mapping call returns in about 2.5 min. The likely cause is that the model reasons longer on the unfamiliar names and codes and the connection is closed at about 4.5 min. The pipeline failed closed: nothing was mapped, validated or written. Making it work needs a client change (streaming or a longer-lived connection), which this eval deliberately did not make. So there are **no live mapping or LLM-review numbers for the held-out export yet.** Whether any tokens were billed for the dropped calls is unknown, because no usage came back.
+
+**Rules only, with the correct mapping** (the deterministic half on its own, no LLM; mapping written by hand in `data/heldout/reference_mapping.json`):
+
+| outcome | count | share of 2,231 |
+|---|---:|---:|
+| auto-fixed (fixed + duplicates removed) | 1,531 | 68.6% |
+| routed to a person | 594 | 26.6% |
+| undetected (loaded wrong) | 106 | 4.8% |
+| clean rows held anyway (false positives) | 1 | |
+
+* **The two unseen corruption types did not get through.** All 90 decimal commas were held for a person. Of the 50 thousands separators, 37 (`2,000`) were parsed to the right value without a finding, and 13 (`8.000`) were held. None were loaded wrong.
+* **The 106 undetected errors are all day/month dates valid either way round**, the same known limit as on the main export.
+* **The merged `MAKE_MODEL` column has no place in the target schema**: a column maps to one field. With the correct mapping it is left unmapped, so manufacturer and model are blank for all 1,157 assets. That's not a silent change, because the cells are empty rather than wrong. But a real migration would need a split rule, which onboard doesn't have.
