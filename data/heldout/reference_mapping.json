@@ -1,0 +1,132 @@
+{
+ "source_date_format": "%d/%m/%Y",
+ "sheets": {
+  "ASSET_REG": {
+   "table": "assets",
+   "columns": {
+    "TAG": "asset_id",
+    "TAG_TXT": "description",
+    "OBJ_TYPE": "asset_class",
+    "SUP_TAG": "parent_asset_id",
+    "FLOC": "location_id",
+    "ABC_IND": "criticality",
+    "SER_NR": "serial_number",
+    "START_UP": "install_date",
+    "CNTR_TYP": "meter_type",
+    "SYS_STAT": "status"
+   },
+   "value_maps": {
+    "asset_class": {
+     "CVY": "CONVEYOR",
+     "CRU": "CRUSHER",
+     "HAUL": "HAUL_TRUCK",
+     "PMP": "PUMP",
+     "ESS": "BESS",
+     "SCR": "SCREEN",
+     "FDR": "FEEDER",
+     "CMP": "COMPRESSOR",
+     "TRF": "TRANSFORMER",
+     "FN": "FAN",
+     "S/R": "STACKER_RECLAIMER",
+     "MTR": "MOTOR",
+     "GBX": "GEARBOX",
+     "PUL": "PULLEY",
+     "BLT": "BELT",
+     "LUB": "LUBE_SYSTEM",
+     "HYD": "HPU",
+     "ENG": "ENGINE",
+     "TRM": "TRANSMISSION",
+     "FD": "FINAL_DRIVE",
+     "INV": "PCS",
+     "BAT": "BATTERY_CONTAINER",
+     "AC": "HVAC",
+     "FSS": "FIRE_SUPPRESSION"
+    },
+    "criticality": {
+     "H": 1,
+     "M": 2,
+     "L": 3
+    },
+    "meter_type": {
+     "OPH": "HOURS",
+     "KM": "KM",
+     "CNT": "CYCLES",
+     "MWH": "MWH",
+     "-": "NONE"
+    },
+    "status": {
+     "ACTV": "ACTIVE",
+     "INAC": "INACTIVE"
+    }
+   }
+  },
+  "JOB_HIST": {
+   "table": "work_orders",
+   "columns": {
+    "JOB_NO": "wo_id",
+    "TAG": "asset_id",
+    "PLAN_ID": "pm_id",
+    "JOB_TYPE": "wo_type",
+    "USR_STAT": "status",
+    "PRIO": "priority",
+    "SHORT_TXT": "description",
+    "NOTIF_DT": "reported_date",
+    "BASIC_START": "scheduled_date",
+    "ACT_FINISH": "completed_date",
+    "ACT_WORK": "labor_hours"
+   },
+   "value_maps": {
+    "status": {
+     "CRTD": "OPEN",
+     "REL": "IN_PROGRESS",
+     "TECO": "COMPLETED",
+     "DLFL": "CANCELLED"
+    }
+   }
+  },
+  "MAINT_PLAN": {
+   "table": "pm_schedules",
+   "columns": {
+    "PLAN_ID": "pm_id",
+    "TAG": "asset_id",
+    "PLAN_TXT": "description",
+    "CYCLE_KIND": "trigger_type",
+    "INTERVAL": "frequency_value",
+    "INT_UNIT": "frequency_unit",
+    "WORK_CTR": "craft",
+    "PLAN_HRS": "est_labor_hours",
+    "LAST_CALL": "last_done_date"
+   },
+   "value_maps": {
+    "trigger_type": {
+     "CAL": "TIME",
+     "CNT": "METER"
+    },
+    "frequency_unit": {
+     "DAY": "DAYS",
+     "HR": "HOURS",
+     "KM": "KM",
+     "CYC": "CYCLES",
+     "MWH": "MWH"
+    }
+   }
+  },
+  "FUNC_LOC": {
+   "table": "locations",
+   "columns": {
+    "FLOC": "location_id",
+    "FLOC_TXT": "name",
+    "SUP_FLOC": "parent_location_id",
+    "PLANT": "site_id",
+    "FLOC_CAT": "location_type"
+   },
+   "value_maps": {
+    "location_type": {
+     "PL": "SITE",
+     "AR": "AREA",
+     "SY": "SYSTEM"
+    }
+   }
+  }
+ }
+}

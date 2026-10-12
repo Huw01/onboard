@@ -23,11 +23,13 @@ def replay_run(usage_path: Path | None = None) -> RunResult:
     return run(EXPORT, LLM(mode="replay", usage_path=usage_path), AS_OF)
 
 
-def evaluate(rr: RunResult) -> dict:
+def evaluate(rr: RunResult, truth: Path = TRUTH, reference: dict | None = None) -> dict:
+    """Score a run against an answer key. ``truth``/``reference`` default to the main
+    export; the held-out eval passes its own answer key and reference mapping."""
     acc = mapping_accuracy(json.loads(json.dumps(rr.mapping)),
-                           json.loads(json.dumps(reference_mapping())))
-    before, after = scoreboard(rr.before, TRUTH), scoreboard(rr.after, TRUTH)
-    s_before, s_after = score(rr.before, TRUTH), score(rr.after, TRUTH)
+                           json.loads(json.dumps(reference or reference_mapping())))
+    before, after = scoreboard(rr.before, truth), scoreboard(rr.after, truth)
+    s_before, s_after = score(rr.before, truth), score(rr.after, truth)
     accepted = [d for d in rr.decisions if d["accepted"]]
     return {
         "mapping": acc,

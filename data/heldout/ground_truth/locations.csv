@@ -1,0 +1,44 @@
+location_id,site_id,parent_location_id,name,location_type
+GR,GR,,Granite Ridge Mine,SITE
+GR-PIT,GR,GR,Open Pit,AREA
+GR-PIT-01,GR,GR-PIT,Open Pit - North Bench,SYSTEM
+GR-PIT-02,GR,GR-PIT,Open Pit - South Bench,SYSTEM
+GR-PIT-03,GR,GR-PIT,Open Pit - Haul Road,SYSTEM
+GR-CRSH,GR,GR,Primary Crushing,AREA
+GR-CRSH-01,GR,GR-CRSH,Primary Crushing - Crusher 1 Building,SYSTEM
+GR-CRSH-02,GR,GR-CRSH,Primary Crushing - Crusher 2 Building,SYSTEM
+GR-CONV,GR,GR,Overland Conveying,AREA
+GR-CONV-01,GR,GR-CONV,Overland Conveying - Line 1,SYSTEM
+GR-CONV-02,GR,GR-CONV,Overland Conveying - Line 2,SYSTEM
+GR-CONV-03,GR,GR-CONV,Overland Conveying - Line 3,SYSTEM
+GR-CONV-04,GR,GR-CONV,Overland Conveying - Transfer Towers,SYSTEM
+GR-PLNT,GR,GR,Concentrator Plant,AREA
+GR-PLNT-01,GR,GR-PLNT,Concentrator Plant - Grinding,SYSTEM
+GR-PLNT-02,GR,GR-PLNT,Concentrator Plant - Flotation,SYSTEM
+GR-PLNT-03,GR,GR-PLNT,Concentrator Plant - Thickening,SYSTEM
+GR-PLNT-04,GR,GR-PLNT,Concentrator Plant - Filtration,SYSTEM
+GR-DWTR,GR,GR,Dewatering,AREA
+GR-DWTR-01,GR,GR-DWTR,Dewatering - Pit Sumps,SYSTEM
+GR-DWTR-02,GR,GR-DWTR,Dewatering - Booster Station,SYSTEM
+GR-DWTR-03,GR,GR-DWTR,Dewatering - Tailings Return,SYSTEM
+GR-PWR,GR,GR,Power & BESS Yard,AREA
+GR-PWR-01,GR,GR-PWR,Power & BESS Yard - Main Substation,SYSTEM
+GR-PWR-02,GR,GR-PWR,Power & BESS Yard - BESS Yard A,SYSTEM
+GR-PWR-03,GR,GR-PWR,Power & BESS Yard - BESS Yard B,SYSTEM
+GR-TSHOP,GR,GR,Truck Shop,AREA
+GR-TSHOP-01,GR,GR-TSHOP,Truck Shop - Service Bays,SYSTEM
+GR-TSHOP-02,GR,GR-TSHOP,Truck Shop - Wash Bay,SYSTEM
+GR-TSHOP-03,GR,GR-TSHOP,Truck Shop - Fuel Bay,SYSTEM
+PH,PH,,Port Halden Rail & Port Terminal,SITE
+PH-RAIL,PH,PH,Rail Unloading,AREA
+PH-RAIL-01,PH,PH-RAIL,Rail Unloading - Car Dumper,SYSTEM
+PH-RAIL-02,PH,PH-RAIL,Rail Unloading - Dumper Conveyors,SYSTEM
+PH-STKY,PH,PH,Stockyard,AREA
+PH-STKY-01,PH,PH-STKY,Stockyard - Stacker Line,SYSTEM
+PH-STKY-02,PH,PH-STKY,Stockyard - Reclaim Line,SYSTEM
+PH-SHIP,PH,PH,Shiploading,AREA
+PH-SHIP-01,PH,PH-SHIP,Shiploading - Shiploader,SYSTEM
+PH-SHIP-02,PH,PH-SHIP,Shiploading - Berth Conveyors,SYSTEM
+PH-PWR,PH,PH,Substation & BESS,AREA
+PH-PWR-01,PH,PH-PWR,Substation & BESS - Port Substation,SYSTEM
+PH-PWR-02,PH,PH-PWR,Substation & BESS - BESS Yard,SYSTEM
